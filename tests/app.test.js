@@ -2,7 +2,7 @@ const supertest = require('supertest');
 const {app, server} = require('../app');
 const request = supertest(app);
 
-const {connectDB, disconnectDB} = require('../database/database');
+const {connectDB, disconnectDB} = require('../database/mongo.database');
 
 describe('API test', () => {
     beforeAll(() => {

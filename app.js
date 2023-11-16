@@ -3,12 +3,12 @@
 const express = require('express');
 const app = express();
 const port =  process.env.PORT || 3000;
-const {router} = require('./routes/profile');
+const {dashboardRouter} = require('./routes/router');
+const {apiRouter} = require('./routes/profile.api.route');
 
 // set the view engine to ejs
 app.set('view engine', 'ejs');
 
-app.use(express.json());
 app.use(
     express.urlencoded({
         extended: true,
@@ -16,7 +16,8 @@ app.use(
 );
 
 // routes
-app.use('/', router);
+app.use('/', dashboardRouter);
+app.use('/api', apiRouter)
 
 // start server
 const server = app.listen(port);
