@@ -100,7 +100,7 @@ const getProfiles = (async (response, id) => {
     if (profile) {
         responseData(response, 200, profile);
     } else {
-        responseData(response, 200, profile);
+        responseData(response, 404, profile);
     }
 });
 
