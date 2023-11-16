@@ -8,7 +8,7 @@ const {
 } = require('../controllers/profile.controller')
 
 router.use(express.json());
-router.get('/profile', viewProfiles);
+router.get('/profile/:id', viewProfiles);
 router.post('/profile', createProfile);
 
 module.exports = router;

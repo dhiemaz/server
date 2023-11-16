@@ -25,48 +25,48 @@ const profiles = [
 ];
 
 const userProfile = new Schema({
-    id : {
-        type : Number,
+    id: {
+        type: Number,
         default: 0,
         startAt: 1
     },
-    name : {
+    name: {
         type: String,
         required: true
     },
-    description : {
+    description: {
         type: String,
         required: true
     },
-    mbti : {
+    mbti: {
         type: String,
         required: true
     },
-    enneagram :{
+    enneagram: {
         type: String,
         required: true
     },
-    variant : {
+    variant: {
         type: String,
         required: true
     },
-    tritype : {
+    tritype: {
         type: Number,
         required: true
     },
-    socionics : {
+    socionics: {
         type: String,
         required: true
     },
-    sloan : {
+    sloan: {
         type: String,
         required: true
     },
-    psyche : {
+    psyche: {
         type: String,
         required: true
     },
-    image : {
+    image: {
         type: String,
         required: true
     }
@@ -86,14 +86,22 @@ const insertProfile = ((response, data) => {
         image: 'https://soulverse.boo.world/images/1.png'
     })
 
-    newProfile.save()
-        .then(() => logger.info('creating new profile with data = ', JSON.stringify(data)))
-        .catch((err) => logger.error(err))
-    responseMessage(response, 201, 'Profile successfully created');
+    newProfile.save().then(function () {
+        logger.info('creating new profile with data: ', JSON.stringify(data));
+        responseMessage(response, 201, 'Profile successfully created');
+    }).catch(function(err) {
+        logger.error('failed create new profile, error: ', err);
+        responseMessage(response, 422, 'Failed create profile');
+    })
 });
 
-const getProfiles = ((response) => {
-    responseData(response, 200, profiles[0])
+const getProfiles = (async (response, id) => {
+    const profile = await userProfile.findOne({_id: id})
+    if (profile) {
+        responseData(response, 200, profile);
+    } else {
+        responseData(response, 200, profile);
+    }
 });
 
 const viewProfile = ((response) => {

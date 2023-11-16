@@ -11,7 +11,11 @@ const {
 // getProfiles from in-memory
 const viewProfiles = ((req, res) => {
     logger.info('called viewProfiles');
-    getProfiles(res);
+    getProfiles(res, req.params.id).then( function() {
+        logger.info('get profile-id : ', req.params.id);
+    }).catch(function(err) {
+        logger.error('failed get profile-id :', req.params.id , 'error: ', err)
+    });
 })
 
 // createProfile
