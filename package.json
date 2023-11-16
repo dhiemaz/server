@@ -1,7 +1,7 @@
 {
   "name": "server",
   "version": "1.0.0",
-  "description": "",
+  "description": "Boo technical coding test using nodejs",
   "main": "app.js",
   "scripts": {
     "build": "babel app.js -d dist",
@@ -9,7 +9,7 @@
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],
-  "author": "",
+  "author": "Dimas Yudha Prawira <prawira.dimas.yudha@gmail.com>",
   "license": "ISC",
   "dependencies": {
     "ejs": "^3.1.9",
