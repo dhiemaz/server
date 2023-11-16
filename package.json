@@ -26,6 +26,7 @@
     "mongodb-memory-server": "^9.0.1",
     "nodemon": "^3.0.1",
     "pino": "^8.16.2",
-    "supertest": "^6.3.3"
+    "supertest": "^6.3.3",
+    "validate.js": "^0.13.1"
   }
 }

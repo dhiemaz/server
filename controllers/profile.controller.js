@@ -1,8 +1,6 @@
 'use strict';
 
 const pino = require("pino");
-const {json} = require("express");
-const {stringify} = require("nodemon/lib/utils");
 const logger = pino({level:'info'})
 
 const profiles = [
