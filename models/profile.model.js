@@ -5,6 +5,8 @@ const {
     responseMessage,
     responseView
 } = require('../utils/response')
+const mongoose = require("mongoose");
+const Schema = mongoose.Schema;
 
 const profiles = [
     {
@@ -21,8 +23,72 @@ const profiles = [
         "image": "https://soulverse.boo.world/images/1.png",
     }
 ];
+
+const userProfile = new Schema({
+    id : {
+        type : Number,
+        default: 0,
+        startAt: 1
+    },
+    name : {
+        type: String,
+        required: true
+    },
+    description : {
+        type: String,
+        required: true
+    },
+    mbti : {
+        type: String,
+        required: true
+    },
+    enneagram :{
+        type: String,
+        required: true
+    },
+    variant : {
+        type: String,
+        required: true
+    },
+    tritype : {
+        type: Number,
+        required: true
+    },
+    socionics : {
+        type: String,
+        required: true
+    },
+    sloan : {
+        type: String,
+        required: true
+    },
+    psyche : {
+        type: String,
+        required: true
+    },
+    image : {
+        type: String,
+        required: true
+    }
+});
+
 const insertProfile = ((response, data) => {
-    logger.info('creating new profile with data = ', JSON.stringify(data))
+    let newProfile = new userProfile({
+        name: data.name,
+        description: data.description,
+        mbti: data.mbti,
+        enneagram: data.enneagram,
+        variant: data.variant,
+        tritype: data.tritype,
+        socionics: data.socionics,
+        sloan: data.sloan,
+        psyche: data.psyche,
+        image: 'https://soulverse.boo.world/images/1.png'
+    })
+
+    newProfile.save()
+        .then(() => logger.info('creating new profile with data = ', JSON.stringify(data)))
+        .catch((err) => logger.error(err))
     responseMessage(response, 201, 'Profile successfully created');
 });
 

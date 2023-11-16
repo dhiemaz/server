@@ -50,11 +50,6 @@ const validateProfile = (data) => {
             presence : {
                 allowEmpty: false
             }
-        },
-        image : {
-            presence : {
-                allowEmpty: false
-            }
         }
     }
 
