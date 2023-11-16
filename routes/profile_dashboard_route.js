@@ -1,7 +1,7 @@
 'use strict';
 
 const express = require('express');
-const dashboardRouter = express.Router();
+const router = express.Router();
 
 const profiles = [
   {
@@ -19,10 +19,10 @@ const profiles = [
   }
 ];
 
-dashboardRouter.get('/*', function(req, res, next) {
+router.get('/', function(req, res, next) {
   res.render('profile_template', {
     profile: profiles[0],
   });
 });
 
-module.exports = dashboardRouter;
+module.exports = router;

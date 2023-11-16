@@ -1,10 +1,8 @@
 'use strict';
 
 const express = require('express');
-const mongoose = require('mongoose');
-const {MongoMemoryServer}=require('mongodb-memory-server');
 const {json} = require("express");
-const apiRouter = express.Router();
+const router = express.Router();
 
 const profiles = [
     {
@@ -22,15 +20,16 @@ const profiles = [
     }
 ];
 
-apiRouter.use(express.json());
-apiRouter.get('/api/profile', function(req, res, next) {
+router.use(express.json());
+router.get('/profile', function(req, res, next) {
+    console.log('GET request accepted');
     res.json(profiles);
 });
 
-apiRouter.post('/api/profile', function(req, res, next) {
-    console.log(req.body);
+router.post('/profile', function(req, res, next) {
+    console.log('POST request accepted : ', req.body);
     res.send('POST accepted.');
 });
 
-module.exports = apiRouter;
+module.exports = router;
 

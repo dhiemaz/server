@@ -3,8 +3,9 @@
 const express = require('express');
 const app = express();
 const port =  process.env.PORT || 3000;
-const {dashboardRouter} = require('./routes/router');
-const {apiRouter} = require('./routes/profile.api.route');
+const apiRoute = require('./routes/profile_api_route');
+const indexRoute = require('./routes/profile_dashboard_route')
+
 
 // set the view engine to ejs
 app.set('view engine', 'ejs');
@@ -16,8 +17,8 @@ app.use(
 );
 
 // routes
-app.use('/', dashboardRouter);
-app.use('/api', apiRouter)
+app.use("/", indexRoute);
+app.use("/api", apiRoute);
 
 // start server
 const server = app.listen(port);
