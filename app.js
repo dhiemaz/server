@@ -3,8 +3,8 @@
 const express = require('express');
 const app = express();
 const port =  process.env.PORT || 3000;
-const apiRoute = require('./routes/profile_api_route');
-const indexRoute = require('./routes/profile_dashboard_route')
+const apiRoute = require('./routes/profile.api.route');
+const indexRoute = require('./routes/profile.dashboard.route')
 
 
 // set the view engine to ejs

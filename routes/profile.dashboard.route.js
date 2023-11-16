@@ -2,6 +2,7 @@
 
 const express = require('express');
 const router = express.Router();
+const {viewDashboardProfile, getProfiles} = require('../controllers/profile.controller')
 
 const profiles = [
   {
@@ -19,10 +20,6 @@ const profiles = [
   }
 ];
 
-router.get('/', function(req, res, next) {
-  res.render('profile_template', {
-    profile: profiles[0],
-  });
-});
+router.get('/', viewDashboardProfile);
 
 module.exports = router;
