@@ -2,7 +2,9 @@
 
 const express = require('express');
 const router = express.Router();
-const {viewDashboardProfile} = require('../controllers/profile.controller')
+const {
+    viewDashboardProfile
+} = require('../controllers/profile.controller')
 
 router.get('/', viewDashboardProfile);
 

@@ -1,46 +1,36 @@
 'use strict';
 
 const pino = require("pino");
-const logger = pino({level:'info'})
-
-const profiles = [
-    {
-        "id": 1,
-        "name": "A Martinez",
-        "description": "Adolph Larrue Martinez III.",
-        "mbti": "ISFJ",
-        "enneagram": "9w3",
-        "variant": "sp/so",
-        "tritype": 725,
-        "socionics": "SEE",
-        "sloan": "RCOEN",
-        "psyche": "FEVL",
-        "image": "https://soulverse.boo.world/images/1.png",
-    }
-];
+const logger = pino({level: 'info'})
+const {
+    insertProfile,
+    getProfiles,
+    viewProfile
+} = require('../models/profile.model')
 
 // getProfiles from in-memory
-const getProfiles = ((req, res) => {
-    logger.info('called getProfiles, result : ' + JSON.stringify(profiles[0]));
-    res.status(200).json(profiles);
+const viewProfiles = ((req, res) => {
+    logger.info('called viewProfiles');
+    getProfiles(res);
 })
 
 // createProfile
 const createProfile = ((req, res) => {
-    logger.info('call createProfile, payload : ', req.body);
+    let data = {...req.body}
+
+    logger.info('called createProfile, payload : ', req.body);
+    insertProfile(res, data);
     res.status(201).json('profile created')
 })
 
 // viewDashboardProfile
 const viewDashboardProfile = ((req, res) => {
-    logger.info('called viewDashboardProfile, result : ' + JSON.stringify(profiles[0]));
-    res.render('profile_template', {
-        profile: profiles[0],
-    });
+    logger.info('called viewDashboardProfile');
+    viewProfile(res);
 })
 
 module.exports = {
-    getProfiles,
+    viewProfiles,
     createProfile,
     viewDashboardProfile
 }

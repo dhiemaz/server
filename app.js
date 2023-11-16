@@ -2,6 +2,7 @@
 
 const express = require('express');
 const app = express();
+const bodyParser = require('body-parser')
 const port =  process.env.PORT || 3000;
 const apiRoute = require('./routes/profile.api.route');
 const indexRoute = require('./routes/profile.dashboard.route')
@@ -9,12 +10,12 @@ const indexRoute = require('./routes/profile.dashboard.route')
 
 // set the view engine to ejs
 app.set('view engine', 'ejs');
-
 app.use(
     express.urlencoded({
-        extended: true,
+        extended: false,
     })
 );
+app.use(bodyParser.json());
 
 // routes
 app.use("/", indexRoute);

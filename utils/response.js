@@ -20,7 +20,16 @@ const responseMessage = function (response, statusCode, message) {
     response.end;
 };
 
+const responseView = function (response, data) {
+    response.render('profile_template', {
+        profile: data,
+    });
+
+    response.end;
+}
+
 module.exports = {
     responseData,
-    responseMessage
+    responseMessage,
+    responseView
 }
