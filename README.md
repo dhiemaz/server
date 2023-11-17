@@ -13,17 +13,22 @@ boo-world server code challenge built with node with expressjs
 
 
 ## How to run
-### Run natively with node
+### Running Unit Test
+```bash
+
+```
+
+### Run server natively with node
 ```bash
 $node app.js
 ```
 
-### Run with NPM
+### Run server with NPM
 ```bash
 $npm run start
 ```
 
-### Run with container
+### Run server using docker
 This project supported with docker, it's meant that you can run this project using `docker` command
 
 
