@@ -6,16 +6,28 @@
   "scripts": {
     "build": "babel app.js -d dist",
     "start": "npm run build && nodemon dist/app.js",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "lint": "./node_modules/.bin/eslint ./",
+    "lint-fix": "./node_modules/.bin/eslint ./ --fix",
+    "test": "jest --runInBand --detectOpenHandles"
   },
-  "keywords": [],
+  "keywords": [
+    "boo",
+    "world",
+    "coding",
+    "challenge",
+    "mongoose",
+    "inmemory",
+    "jest",
+    "mongodb",
+    "nodejs",
+    "expressjs"
+  ],
   "author": "Dimas Yudha Prawira <prawira.dimas.yudha@gmail.com>",
   "license": "ISC",
   "dependencies": {
     "ejs": "^3.1.9",
     "express": "^4.17.1",
-    "mongoose": "^8.0.1",
-    "mongoose-auto-increment": "5.0.1"
+    "mongoose": "^5.13.7"
   },
   "devDependencies": {
     "@babel/cli": "^7.23.0",
@@ -29,5 +41,8 @@
     "pino": "^8.16.2",
     "supertest": "^6.3.3",
     "validate.js": "^0.13.1"
+  },
+  "jest": {
+    "testEnvironment": "node"
   }
 }
