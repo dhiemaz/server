@@ -27,6 +27,10 @@ const findProfile = ((req, res) => {
     });
 })
 
+/**
+ * getAllProfiles record
+ * @type {getAllProfiles}
+ */
 const getAllProfiles = ((req, res) => {
     logger.info('get all profile records');
     getProfiles().then(function (profile) {
@@ -40,7 +44,10 @@ const getAllProfiles = ((req, res) => {
     });
 })
 
-// createProfile
+/**
+ * createProfile new
+ * @type {createProfile}
+ */
 const createProfile = ((req, res) => {
     let data = {...req.body}
     logger.info(`create a new profile, data: ${data}`);
@@ -50,10 +57,12 @@ const createProfile = ((req, res) => {
     } catch (err) {
         responseMessage(res, 422, 'failed create new profile');
     }
-
 })
 
-// viewDashboardProfile
+/**
+ * viewDashboardProfile
+ * @type {viewDashboardProfile}
+ */
 const viewDashboardProfile = ((req, res) => {
     logger.info('view dashboard profile');
     try {
