@@ -15,7 +15,7 @@ boo-world server code challenge built with node with expressjs
 ## How to run
 ### Running Unit Test
 ```bash
-
+$npm test
 ```
 
 ### Run server natively with node
