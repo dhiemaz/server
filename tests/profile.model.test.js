@@ -26,9 +26,12 @@ beforeAll(async () => await dbHandler.connectDB());
 /**
  * remove and close db and server
  */
-afterAll(async () => await dbHandler.disconnectDB());
+afterAll(async () => {
+    await dbHandler.clearDB();
+    await dbHandler.disconnectDB()
+});
 
-describe('profile test', () => {
+describe('profile test suite', () => {
     let savedProfile = null;
     /**
      * tests that valid profile can be created through profile services with success
@@ -38,9 +41,14 @@ describe('profile test', () => {
         expect(savedProfile.name).toBe(profileData.name)
     })
 
-    it('can be retrieved successfully', async () => {
+    it('retrieve single profile successfully', async () => {
         const {_id} = savedProfile;
-        const result = await profileService.getProfiles(_id);
+        const result = await profileService.getProfile(_id);
         expect(result.name).toBe(profileData.name);
+    })
+
+    it('retrieve all profile records successfully', async () => {
+        const result = await profileService.getProfiles();
+        expect(result.length).toBe(1);
     })
 });

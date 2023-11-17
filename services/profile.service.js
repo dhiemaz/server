@@ -46,6 +46,17 @@ const getProfile = (async (id) => {
     }
 });
 
+const getProfiles = (async () => {
+    try {
+        let result = await userProfile.find({});
+        logger.info(`get all profile records, result: ${result}`);
+        return result
+    } catch (err) {
+        logger.error(`failed get all profile records, error: ${err}`)
+        return err;
+    }
+});
+
 /**
  * viewProfile from dummy profile
  * @type {function(): {psyche: string, image: string, sloan: string, enneagram: string, name: string, variant: string, description: string, mbti: string, id: number, tritype: number, socionics: string}}
@@ -57,6 +68,7 @@ const viewProfile = (() => {
 
 module.exports = {
     insertProfile,
+    getProfiles,
     getProfile,
     viewProfile
 }
