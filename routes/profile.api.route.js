@@ -3,12 +3,14 @@
 const express = require('express');
 const router = express.Router();
 const {
-    viewProfiles,
-    createProfile
+    findProfile,
+    getAllProfiles,
+    createProfile,
 } = require('../controllers/profile.controller')
 
 router.use(express.json());
-router.get('/profile/:id', viewProfiles);
+router.get('/profile/:id', findProfile);
+router.get('/profiles', getAllProfiles);
 router.post('/profile', createProfile);
 
 module.exports = router;

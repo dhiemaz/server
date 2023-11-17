@@ -6,8 +6,10 @@ const bodyParser = require('body-parser')
 const port =  process.env.PORT || 3000;
 const apiRoute = require('./routes/profile.api.route');
 const indexRoute = require('./routes/profile.dashboard.route')
-const mongoHandler = require('./database/mongo.database')
+const dbHandler = require('./database/mongo.database')
 
+// database connection start
+dbHandler.connectDB();
 
 // set the view engine to ejs
 app.set('view engine', 'ejs');

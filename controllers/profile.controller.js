@@ -5,50 +5,68 @@ const logger = pino({level: 'info'})
 const {
     insertProfile,
     getProfiles,
+    getProfile,
     viewProfile
 } = require('../services/profile.service')
 const {responseMessage, responseData, responseView} = require("../utils/response");
 
-// getProfiles from in-memory
-const viewProfiles = ((req, res) => {
-    logger.info('called getProfiles');
-    getProfiles(req.params.id).then(function (profile) {
-        logger.info('get profile-id : ', req.params.id);
+/**
+ * findProfile by id
+ * @type {findProfile}
+ */
+const findProfile = ((req, res) => {
+    logger.info(`get profile by id: ${req.params.id}`);
+    getProfile(req.params.id).then(function (profile) {
         if (profile) {
             responseData(res, 200, profile);
         } else {
             responseData(res, 404, profile);
         }
     }).catch(function (err) {
-        logger.error('failed get profile-id :', req.params.id, 'error: ', err)
+        logger.error(`failed get profile by id: ${req.params.id}, error: ${err}`)
+    });
+})
+
+const getAllProfiles = ((req, res) => {
+    logger.info('get all profile records');
+    getProfiles().then(function (profile) {
+        if (profile) {
+            responseData(res, 200, profile);
+        } else {
+            responseData(res, 404, profile);
+        }
+    }).catch(function (err) {
+        logger.error(`failed get all profile records, error: ${err}`)
     });
 })
 
 // createProfile
 const createProfile = ((req, res) => {
     let data = {...req.body}
-    logger.info('called insertProfile with payload : ', req.body);
+    logger.info(`create a new profile, data: ${data}`);
     try {
         insertProfile(data);
-        responseMessage(res, 201, 'user profile successfully created.');
+        responseMessage(res, 201, 'new profile successfully created.');
     } catch (err) {
-        responseMessage(res, 422, 'Failed create profile');
+        responseMessage(res, 422, 'failed create new profile');
     }
 
 })
 
 // viewDashboardProfile
 const viewDashboardProfile = ((req, res) => {
-    logger.info('called viewProfile');
-    viewProfile().then(function (profile) {
+    logger.info('view dashboard profile');
+    try {
+        let profile = viewProfile();
         responseView(res, profile)
-    }).catch(function (err) {
-        logger.error('failed viewProfile, error: ', err)
-    });
+    } catch (err) {
+        logger.error(`failed view dashboard profile, error: ${err}`);
+    }
 })
 
 module.exports = {
-    viewProfiles,
+    findProfile,
+    getAllProfiles,
     createProfile,
     viewDashboardProfile
 }

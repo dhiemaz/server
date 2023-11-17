@@ -16,7 +16,7 @@ const responseMessage = function (response, statusCode, message) {
         message: message
     };
 
-    response.status(statusCode).json(message);
+    response.status(statusCode).json(data);
     response.end;
 };
 
