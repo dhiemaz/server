@@ -13,9 +13,7 @@ const connectDB = async () => {
 
         const mongooseOpts = {
             useUnifiedTopology: true,
-            autoReconnect: true,
-            reconnectTries: Number.MAX_VALUE,
-            reconnectInterval: 1000,
+            useNewUrlParser: true
         };
 
         await mongoose.connect(uri, mongooseOpts);

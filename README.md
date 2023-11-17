@@ -8,6 +8,31 @@ boo-world server code challenge built with node with expressjs
 
 ## Project structure
 ```markdown
+├── config
+├── database
+│   └── mongo.database.js
+├── controllers
+│   └── profile.controller.js
+├── models
+│   └── profile.model.js
+├── services
+│   └── profile.service.route.js
+├── routes
+│   └── profile.api.route.js
+│   └── profile.dashboard.route.js
+├── utils
+│   └── response.js
+│   └── validation.js
+├── views
+│   └── partials
+│   └── profile_template.ejs
+├── package-lock.json
+├── package.json
+├── .env
+├── .gitignore
+├── .dockerignore
+├── Dockerfile
+└── app.js
 
 ```
 

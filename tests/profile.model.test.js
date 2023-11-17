@@ -1,12 +1,12 @@
 const dbHandler = require('../database/mongo.database')
-const profileService = require('../service/profile.service')
+const profileService = require('../services/profile.service')
+const mongoose = require('mongoose');
 
 /**
  * profileData example
  * @type {{psyche: string, sloan: string, enneagram: string, name: string, variant: string, description: string, mbti: string, id: number, tritype: number, socionics: string}}
  */
 const profileData = {
-    id: 1,
     name: "A Martinez",
     description: "Adolph Larrue Martinez III.",
     mbti: "ISFJ",
@@ -24,21 +24,23 @@ const profileData = {
 beforeAll(async () => await dbHandler.connectDB());
 
 /**
- * clear all test data after every tests
- */
-afterEach(async () => await dbHandler.clearDB());
-
-/**
  * remove and close db and server
  */
 afterAll(async () => await dbHandler.disconnectDB());
 
-describe('profile ', () => {
+describe('profile test', () => {
+    let savedProfile = null;
     /**
-     * tests that valid profile can be created through profile service with success
+     * tests that valid profile can be created through profile services with success
      */
     it('can be created successfully', async () => {
-        expect(async () => await profileService.insertProfile(profileData))
+        savedProfile = await profileService.insertProfile(profileData);
+        expect(savedProfile.name).toBe(profileData.name)
     })
-})
 
+    it('can be retrieved successfully', async () => {
+        const {_id} = savedProfile;
+        const result = await profileService.getProfiles(_id);
+        expect(result.name).toBe(profileData.name);
+    })
+});

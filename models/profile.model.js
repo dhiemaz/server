@@ -1,23 +1,6 @@
-const mgs = require('mongoose');
-const Schema = mgs.Schema;
+const {model, Schema} = require('mongoose');
 
-const profiles = [
-    {
-        "id": 1,
-        "name": "A Martinez",
-        "description": "Adolph Larrue Martinez III.",
-        "mbti": "ISFJ",
-        "enneagram": "9w3",
-        "variant": "sp/so",
-        "tritype": 725,
-        "socionics": "SEE",
-        "sloan": "RCOEN",
-        "psyche": "FEVL",
-        "image": "https://soulverse.boo.world/images/1.png",
-    }
-];
-
-const userProfile = new Schema({
+const profile = new Schema({
     id: {
         type: Number,
         default: 0,
@@ -65,7 +48,8 @@ const userProfile = new Schema({
     }
 });
 
+const userProfile = model('profile', profile)
+
 module.exports = {
-    profiles,
     userProfile
 }

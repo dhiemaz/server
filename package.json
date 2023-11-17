@@ -1,7 +1,7 @@
 {
   "name": "server",
   "version": "1.0.0",
-  "description": "Boo technical coding test using nodejs",
+  "description": "Boo World technical coding test using node and expressjs",
   "main": "app.js",
   "scripts": {
     "build": "babel app.js -d dist",
