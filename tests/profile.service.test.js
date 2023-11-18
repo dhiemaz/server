@@ -32,22 +32,47 @@ afterAll(async () => {
 
 describe('profile test suite', () => {
     let savedProfile = null;
+    let err = null;
     /**
      * tests that valid profile can be created through profile services with success
      */
     it('can be created successfully', async () => {
-        savedProfile = await profileService.insertProfile(profileData);
-        expect(savedProfile.name).toBe(profileData.name)
+        await profileService.insertProfile(profileData).then(function (result) {
+            savedProfile = result;
+        }).catch(function (e) {
+            err = e;
+        }).finally(function () {
+            expect(err).toBeNull();
+            expect(savedProfile.name).toBe(profileData.name)
+        });
     })
 
     it('retrieve single profile successfully', async () => {
+        let err = null;
+        let profile = null;
         const {_id} = savedProfile;
-        const result = await profileService.getProfile(_id);
-        expect(result.name).toBe(profileData.name);
+
+        await profileService.getProfile(_id).then(function (result) {
+            profile = result
+        }).catch(function (e) {
+            err = e;
+        }).finally(function (){
+            expect(err).toBeNull();
+            expect(profile.name).toBe(profileData.name);
+        });
     })
 
     it('retrieve all profile records successfully', async () => {
-        const result = await profileService.getProfiles();
-        expect(result.length).toBe(1);
+        let profiles = null;
+        let err = null;
+
+        await profileService.getProfiles().then(function (result){
+            profiles = result
+        }).catch(function (e) {
+            err = e;
+        }).finally(function (){
+            expect(err).toBeNull();
+            expect(profiles.length).toBe(1);
+        });
     })
 });

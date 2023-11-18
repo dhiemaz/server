@@ -44,8 +44,8 @@ const getCommentByCommentId = (async (id) => {
  */
 const getCommentFromUserId = (async (id) => {
     try {
-        let result = await Comment.find({id: id});
-        logger.info(`successfully get comment from user: ${id}`);
+        let result = await Comment.find({from: id});
+        logger.info(`successfully get comment from user: ${id}, result: ${result}`);
         return result
     } catch (err) {
         logger.error(`failed get comment from user: ${id}, error: ${err}`)
