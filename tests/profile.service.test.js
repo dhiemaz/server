@@ -1,6 +1,5 @@
 const dbHandler = require('../database/mongo.database')
 const profileService = require('../services/profile.service')
-const mongoose = require('mongoose');
 
 /**
  * profileData example

@@ -1,15 +1,14 @@
 const pino = require('pino');
 const logger = pino({level: 'info'});
-const {userProfile} = require('../models/profile.model')
+const {Profile} = require('../models/profile.model')
 const dummyProfile = require('../models/fixtures/profile.dummy.model')
-const mongoose = require("mongoose");
 
 /**
  * insertProfile user
  * @type {(function(*): Promise<(Document<any, any, unknown> & {})|*|undefined>)|*}
  */
 const insertProfile = (async (data) => {
-    let newProfile = new userProfile({
+    let newProfile = new Profile({
         name: data.name,
         description: data.description,
         mbti: data.mbti,
@@ -26,7 +25,7 @@ const insertProfile = (async (data) => {
         logger.info(`creating new profile with id: ${result._id}`);
         return result;
     } catch (err) {
-        logger.error('failed create new profile');
+        logger.error(`failed create new profile, error: ${err}`);
         return err;
     }
 });
@@ -37,7 +36,7 @@ const insertProfile = (async (data) => {
  */
 const getProfile = (async (id) => {
     try {
-        let result = await userProfile.findById(id);
+        let result = await Profile.findById(id);
         logger.info(`get profile with id: ${id}, result: ${result}`);
         return result
     } catch (err) {
@@ -48,7 +47,7 @@ const getProfile = (async (id) => {
 
 const getProfiles = (async () => {
     try {
-        let result = await userProfile.find({});
+        let result = await Profile.find({});
         logger.info(`get all profile records, result: ${result}`);
         return result
     } catch (err) {

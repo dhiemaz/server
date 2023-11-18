@@ -45,11 +45,12 @@ const profile = new Schema({
     image: {
         type: String,
         required: true
-    }
+    },
+    timestamps: true
 });
 
-const userProfile = model('profile', profile)
+const Profile = model('profile', profile)
 
 module.exports = {
-    userProfile
+    Profile
 }
