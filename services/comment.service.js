@@ -8,18 +8,17 @@ const {Comment} = require('../models/comment.model')
  */
 const insertComment = (async (data) => {
     let newComment = new Comment({
-        id: data.id,
-        name: data.name,
+        from: data.from,
         to: data.to,
         title: data.title,
         comment: data.comment,
     })
     try {
         let result = await newComment.save();
-        logger.info(`insert new comment from id: ${data.id} for id: ${data.to}`);
+        logger.info(`insert new comment from id: ${data.from} for id: ${data.to}`);
         return result;
     } catch (err) {
-        logger.error(`insert new comment from id: ${data.id} for id: ${data.to}, error: ${err}`);
+        logger.error(`insert new comment from id: ${data.from} for id: ${data.to}, error: ${err}`);
         return err;
     }
 });

@@ -2,8 +2,7 @@ const dbHandler = require('../database/mongo.database')
 const commentService = require('../services/comment.service')
 
 const commentData = {
-    id: "6557c05402b3eb42e6c67755",
-    name: "A Martinez",
+    from: "6557c05402b3eb42e6c67755",
     to: "6557c05402b3eb42e6c68855",
     title: "test comment",
     comment: "This is a test comment!",
@@ -29,7 +28,6 @@ describe('comment test suite', () => {
      */
     it('comment send successfully', async () => {
         commentSend = await commentService.insertComment(commentData);
-        expect(commentSend.name).toBe(commentData.name)
         expect(commentSend.to).toBe(commentData.to)
     })
 });

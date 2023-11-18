@@ -1,12 +1,7 @@
 const {model, Schema} = require('mongoose');
 
 const comment = new Schema({
-    id: {
-        type: Number,
-        default: 0,
-        startAt: 1
-    },
-    name: {
+    from: {
         type: String,
         required: true
     },
@@ -21,10 +16,11 @@ const comment = new Schema({
     comment: {
         type: String,
         required: true
-    },
+    }
+},{
     timestamps: {
-        createdAt: 'created_at', // Use `created_at` to store the created date
-        updatedAt: 'updated_at' // and `updated_at` to store the last updated date
+        createdAt: 'created_at',
+        updatedAt: 'updated_at'
     }
 });
 

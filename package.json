@@ -4,8 +4,9 @@
   "description": "Boo World technical coding test using node and expressjs",
   "main": "app.js",
   "scripts": {
-    "build": "babel app.js -d dist",
-    "start": "npm run build && nodemon dist/app.js",
+    "build": "babel app.js",
+    "start": "node app.js",
+    "dev": "nodemon app.js",
     "lint": "./node_modules/.bin/eslint ./",
     "lint-fix": "./node_modules/.bin/eslint ./ --fix",
     "test": "jest --runInBand --detectOpenHandles"
@@ -27,7 +28,7 @@
   "dependencies": {
     "ejs": "^3.1.9",
     "express": "^4.17.1",
-    "mongoose": "^8.0.1"
+    "mongoose": "^5.13.21"
   },
   "devDependencies": {
     "@babel/cli": "^7.23.0",
@@ -35,6 +36,7 @@
     "@babel/plugin-proposal-class-properties": "^7.18.6",
     "@babel/plugin-proposal-object-rest-spread": "^7.20.7",
     "@babel/preset-env": "^7.23.3",
+    "babel-jest": "^29.7.0",
     "jest": "^27.1.0",
     "mongodb-memory-server": "^9.0.1",
     "nodemon": "^3.0.1",
@@ -43,7 +45,6 @@
     "validate.js": "^0.13.1"
   },
   "jest": {
-    "testEnvironment": "node",
-    "verbose": true
+    "testEnvironment": "node"
   }
 }

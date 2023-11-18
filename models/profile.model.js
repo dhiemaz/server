@@ -45,8 +45,12 @@ const profile = new Schema({
     image: {
         type: String,
         required: true
-    },
-    timestamps: true
+    }
+},{
+    timestamps: {
+        createdAt: 'created_at',
+        updatedAt: 'updated_at'
+    }
 });
 
 const Profile = model('profile', profile)
