@@ -9,9 +9,9 @@ const {
 } = require('../controllers/profile.controller')
 
 router.use(express.json());
-router.get('/profile/:id', findProfile);
-router.get('/profiles', getAllProfiles);
-router.post('/profile', createProfile);
+router.get('/user/profile/:id', findProfile);
+router.get('/user/profiles', getAllProfiles);
+router.post('/user/profile', createProfile);
 
 module.exports = router;
 
