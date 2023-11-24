@@ -81,4 +81,48 @@ describe('comment test suite', () => {
             expect(comment.likes).toBe(1);
         });
     })
+
+    it('like comment from user again', async () => {
+        let err = null;
+        let comment = null;
+
+        await commentService.likesComment(commentSend._id, 'Like').then(function (result) {
+            comment = result;
+            console.log(`result: ${result}`)
+        }).catch(function (err) {
+            console.log(`catch err: ${err}`);
+        }).finally(function () {
+            expect(err).toBeNull();
+            expect(comment.likes).toBe(2);
+        });
+    })
+
+    it('unlike comment from user', async () => {
+        let err = null;
+        let comment = null;
+
+        await commentService.likesComment(commentSend._id, 'UnLike').then(function (result) {
+            comment = result;
+            console.log(`result: ${result}`)
+        }).catch(function (err) {
+            console.log(`catch err: ${err}`);
+        }).finally(function () {
+            expect(err).toBeNull();
+            expect(comment.likes).toBe(1);
+        });
+    })
+
+    it('unlike comment from user - failed cannot find comment', async () => {
+        let err = null;
+        let comment = null;
+
+        await commentService.likesComment(commentSend.to, 'UnLike').then(function (result) {
+            comment = result;
+            console.log(`result: ${result}`)
+        }).catch(function (err) {
+            console.log(`catch err: ${err}`);
+        }).finally(function () {
+            expect(comment.toString()).toBe('Error: cannot find comment.');
+        });
+    })
 });
