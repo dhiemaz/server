@@ -28,7 +28,8 @@
   "dependencies": {
     "ejs": "^3.1.9",
     "express": "^4.17.1",
-    "mongoose": "^5.13.21"
+    "mongoose": "^5.13.21",
+    "mongoose-auto-increment": "^5.0.1"
   },
   "devDependencies": {
     "@babel/cli": "^7.23.0",
