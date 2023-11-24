@@ -12,8 +12,8 @@ const connectDB = async () => {
         const uri = mongod.getUri();
 
         const mongooseOpts = {
-            useUnifiedTopology: true,
-            useNewUrlParser: true
+            useNewUrlParser: true,
+            useUnifiedTopology: true
         };
 
         await mongoose.connect(uri, mongooseOpts);

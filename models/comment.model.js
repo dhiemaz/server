@@ -1,5 +1,4 @@
 const {model, Schema} = require('mongoose');
-const autoIncrement = require('mongoose-auto-increment');
 
 const comment = new Schema({
     from: {
@@ -28,8 +27,6 @@ const comment = new Schema({
         updatedAt: 'updated_at'
     }
 });
-
-comment.plugin(autoIncrement.plugin, { model: 'comment', field: 'likes', startAt: 0, incrementBy: 1});
 
 const Comment = model('comment', comment)
 

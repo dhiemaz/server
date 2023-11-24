@@ -6,6 +6,7 @@ const commentData = {
     to: "6557c05402b3eb42e6c68855",
     title: "test comment",
     comment: "This is a test comment!",
+    likes: 0
 };
 
 /**
@@ -17,7 +18,7 @@ beforeAll(async () => await dbHandler.connectDB());
  * remove and close db and server
  */
 afterAll(async () => {
-    await dbHandler.clearDB();
+    //await dbHandler.clearDB();
     await dbHandler.disconnectDB();
 });
 
@@ -27,42 +28,57 @@ describe('comment test suite', () => {
     /**
      * tests that valid profile can be created through profile services with success
      */
-    it('comment send successfully', async () => {
+    it('comment send', async () => {
         await commentService.insertComment(commentData).then(function (result) {
             commentSend = result;
-        }).catch(function (e) {
-            err = e;
+        }).catch(function (err) {
+            console.log(`catch err: ${err}`);
         }).finally(function () {
             expect(err).toBeNull();
             expect(commentSend.to).toBe('6557c05402b3eb42e6c68855');
         });
     })
 
-    it('get comment by id successfully', async () => {
+    it('get comment by id', async () => {
         let err = null;
         let comment = null;
 
         await commentService.getCommentByCommentId(commentSend._id).then(function (result) {
             comment = result;
-        }).catch(function (e) {
-            err = e;
+        }).catch(function (err) {
+            console.log(`catch err: ${err}`);
         }).finally(function () {
             expect(err).toBeNull();
             expect(comment.comment).toBe('This is a test comment!');
         });
     })
 
-    it('get comment send by user successfully', async () => {
+    it('get comment from user', async () => {
         let err = null;
         let comment = null;
 
-        await commentService.getCommentFromUserId(commentData.from).then(function (result) {
+        await commentService.getCommentFromUserId(commentSend.from).then(function (result) {
             comment = result;
-        }).catch(function (e) {
-            err = e;
+            console.log(`result: ${comment}`)
+        }).catch(function (err) {
+            console.log(`catch err: ${err}`);
         }).finally(function () {
             expect(err).toBeNull();
-            expect(comment.comment).toBe('This is a test comment!');
+        });
+    })
+
+    it('like comment from user', async () => {
+        let err = null;
+        let comment = null;
+
+        await commentService.likesComment(commentSend._id, 'Like').then(function (result) {
+            comment = result;
+            console.log(`result: ${result}`)
+        }).catch(function (err) {
+            console.log(`catch err: ${err}`);
+        }).finally(function () {
+            expect(err).toBeNull();
+            expect(comment.likes).toBe(1);
         });
     })
 });

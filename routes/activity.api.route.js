@@ -6,14 +6,13 @@ const {
     sendVote,
     sendComment,
     getComment,
-    voteComment,
+    sendLikes,
 } = require('../controllers/activity.controller')
 
 router.use(express.json());
-router.post('/user/activity/vote/:id', sendVote);
+router.post('/user/activity/likes/:id', sendLikes);
 router.post('/user/activty/comment/:id', sendComment);
 router.get('/user/activity/comment', getComment);
-router.post('/user/activity/vote-comment', voteComment);
 
 module.exports = router;
 
