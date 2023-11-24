@@ -3,16 +3,17 @@
 const express = require('express');
 const router = express.Router();
 const {
-    sendVote,
-    sendComment,
-    getComment,
     sendLikes,
+    sendComment,
+    getCommentFrom,
+    getCommentTo
 } = require('../controllers/activity.controller')
 
 router.use(express.json());
-router.post('/user/activity/likes/:id', sendLikes);
-router.post('/user/activty/comment/:id', sendComment);
-router.get('/user/activity/comment', getComment);
+router.post('/user/activity/:act/:id', sendLikes);
+router.post('/user/activty/comment', sendComment);
+router.get('/user/activity/comment/to/:id', getCommentTo);
+router.get('/user/activity/comment/from/:id', getCommentFrom);
 
 module.exports = router;
 

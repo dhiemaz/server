@@ -7,7 +7,7 @@ const {
     getCommentByCommentId,
     getCommentFromUserId,
     getCommentToUserId,
-    autoIncrementCommentLikes
+    likesComment
 } = require('../services/comment.service')
 const {responseMessage, responseData, responseView} = require("../utils/response");
 
@@ -16,16 +16,16 @@ const {responseMessage, responseData, responseView} = require("../utils/response
  * @type {sendLikes}
  */
 const sendLikes = ((req, res) => {
-    logger.info(`like for comment: ${req.params.id}`);
-    autoIncrementCommentLikes()
-    getProfile(req.params.id).then(function (profile) {
-        if (profile) {
-            responseData(res, 200, profile);
+    logger.info(`${req.params.act} for comment: ${req.params.id}`);
+    likesComment(req.params.id, req.params.act).then(function (result) {
+        if (result) {
+            responseData(res, 200, result);
         } else {
-            responseData(res, 404, profile);
+            responseData(res, 404, result);
         }
     }).catch(function (err) {
-        logger.error(`failed get profile by id: ${req.params.id}, error: ${err}`)
+        logger.error(`failed send ${req.params.act} to comment: ${req.params.id}, error: ${err}`)
+        responseMessage(res, 500, err.toString())
     });
 })
 
@@ -35,49 +35,56 @@ const sendLikes = ((req, res) => {
  */
 const sendComment = ((req, res) => {
     logger.info('get all profile records');
-    getProfiles().then(function (profile) {
-        if (profile) {
-            responseData(res, 200, profile);
+    let data = {...req.body}
+    insertComment(data).then(function (result) {
+        if (result) {
+            responseData(res, 200, result);
         } else {
-            responseData(res, 404, profile);
+            responseData(res, 404, result);
         }
     }).catch(function (err) {
-        logger.error(`failed get all profile records, error: ${err}`)
+        logger.error(`failed post comment, error: ${err}`)
+        responseMessage(res, 500, err.toString())
     });
 })
 
 /**
- * getComment
- * @type {getComment}
+ * getCommentFrom
+ * @type {getCommentFrom}
  */
-const getComment = ((req, res) => {
-    let data = {...req.body}
-    logger.info(`create a new profile, data: ${data}`);
-    try {
-        insertProfile(data);
-        responseMessage(res, 201, 'new profile successfully created.');
-    } catch (err) {
-        responseMessage(res, 422, 'failed create new profile');
-    }
+const getCommentFrom = ((req, res) => {
+    logger.info(`get for comment from: ${req.params.id}`);
+    getCommentFromUserId(req.params.id).then(function (result) {
+        if (result) {
+            responseData(res, 200, result);
+        } else {
+            responseData(res, 404, result);
+        }
+    }).catch(function (err) {
+        responseMessage(res, 500, err.toString());
+    });
 })
 
 /**
- * voteComment
- * @type {voteComment}
+ * getCommentTo
+ * @type {getCommentTo}
  */
-const voteComment = ((req, res) => {
-    logger.info('view dashboard profile');
-    try {
-        let profile = viewProfile();
-        responseView(res, profile)
-    } catch (err) {
-        logger.error(`failed view dashboard profile, error: ${err}`);
-    }
+const getCommentTo = ((req, res) => {
+    logger.info(`get for comment to: ${req.params.id}`);
+    getCommentToUserId(req.params.id).then(function (result) {
+        if (result) {
+            responseData(res, 200, result);
+        } else {
+            responseData(res, 404, result);
+        }
+    }).catch(function (err) {
+        responseMessage(res, 500, err.toString());
+    });
 })
 
 module.exports = {
     sendLikes,
     sendComment,
-    getComment,
-    voteComment
+    getCommentFrom,
+    getCommentTo
 }
