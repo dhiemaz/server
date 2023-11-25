@@ -76,11 +76,15 @@ const getCommentTo = (async (req, res) => {
         sortBy = "best"; // set default sortBy best (sort by most number of likes).
     }
 
+    const filter = {
+        mbti: (!(req.query.mbti === undefined || req.query.mbti.toLowerCase() === 'false')),
+        enneagram: (!(req.query.enneagram === undefined || req.query.enneagram.toLowerCase() === 'false')),
+        zodiac: (!(req.query.zodiac === undefined || req.query.zodiac.toLowerCase() === 'false'))
+    }
+
     if (sortBy === "best" || sortBy === "recent") {
         logger.info(`get comment to: ${req.params.id} with sortby: ${sortBy}`);
-        await getCommentToUserId(req.params.id, sortBy, null, page, limit).then(function (result) {
-            logger.info(`result: ${result}`)
-
+        await getCommentToUserId(req.params.id, sortBy, filter, page, limit).then(function (result) {
             if (result) {
                 responseMessage(res, 200, 'success', result);
             } else {

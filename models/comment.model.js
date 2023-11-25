@@ -11,6 +11,22 @@ const comment = new Schema({
         type: String,
         required: true
     },
+    mbti: {
+        type: String,
+        required: false,
+        default: null
+    },
+    enneagram: {
+        type: String,
+        required: false,
+        default: null
+    },
+    zodiac: {
+        type: String,
+        required: false,
+        default: null
+
+    },
     title: {
         type: String,
         required: true

@@ -10,6 +10,9 @@ const insertComment = (async (data) => {
     const newComment = new Comment({
         from: data.from,
         to: data.to,
+        mbti: data.mbti,
+        enneagram: data.enneagram,
+        zodiac: data.zodiac,
         title: data.title,
         comment: data.comment,
         likes: 0
@@ -71,9 +74,15 @@ const getCommentToUserId = (async (id, sortby, filter, page, limit) => {
         sort = {'likes':-1};
     }
 
+    const mbti = filter.mbti === true ? {'mbti': { $exists: true, $ne: null }} : {};
+    const enneagram = filter.enneagram === true ? {'enneagram': { $exists: true, $ne: null }} : {};
+    const zodiac = filter.zodiac === true ? {'zodiac': { $exists: true, $ne: null }} : {};
+
     try {
-        const count = await Comment.countDocuments({to: id});
-        const docs = await Comment.find({to: id}, {to: 0}).
+        const count = await Comment.countDocuments({
+            $and:[{to: id}, mbti, enneagram, zodiac]
+        });
+        const docs = await Comment.find({$and:[{to: id}, mbti, enneagram, zodiac]}, {to: 0}).
         sort(sort).
         skip(_pageNumber > 0 ? ((_pageNumber - 1) * _pageSize) : 0).
         limit(_pageSize).exec()
@@ -83,6 +92,8 @@ const getCommentToUserId = (async (id, sortby, filter, page, limit) => {
             comments: docs
         }
 
+        logger.info(`count: ${count}`)
+        logger.info(`docs: ${docs}`)
         logger.info(`successfully get comment to user: ${id} sortby: ${sortby}`);
         return result;
     } catch (err) {
