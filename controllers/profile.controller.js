@@ -14,9 +14,9 @@ const {responseMessage, responseData, responseView} = require("../utils/response
  * findProfile by id
  * @type {findProfile}
  */
-const findProfile = ((req, res) => {
+const findProfile = (async (req, res) => {
     logger.info(`get profile by id: ${req.params.id}`);
-    getProfile(req.params.id).then(function (profile) {
+    await getProfile(req.params.id).then(function (profile) {
         if (profile) {
             responseData(res, 200, profile);
         } else {
@@ -31,13 +31,13 @@ const findProfile = ((req, res) => {
  * getAllProfiles record
  * @type {getAllProfiles}
  */
-const getAllProfiles = ((req, res) => {
+const getAllProfiles = (async (req, res) => {
     logger.info('get all profile records');
-    getProfiles().then(function (profile) {
+    await getProfiles().then(function (profile) {
         if (profile) {
-            responseData(res, 200, profile);
+            responseMessage(res, 200, 'success', profile);
         } else {
-            responseData(res, 404, profile);
+            responseMessage(res, 404, 'not found', profile);
         }
     }).catch(function (err) {
         logger.error(`failed get all profile records, error: ${err}`)
@@ -48,15 +48,15 @@ const getAllProfiles = ((req, res) => {
  * createProfile new
  * @type {createProfile}
  */
-const createProfile = ((req, res) => {
+const createProfile = (async (req, res) => {
     let data = {...req.body}
     logger.info(`create a new profile, data: ${data}`);
-    try {
-        insertProfile(data);
-        responseMessage(res, 201, 'new profile successfully created.');
-    } catch (err) {
-        responseMessage(res, 422, 'failed create new profile');
-    }
+
+    await insertProfile(data).then(function (result) {
+        responseMessage(res, 201, 'success', result);
+    }).catch(function (err) {
+        responseMessage(res, 422, err.toString());
+    });
 })
 
 /**

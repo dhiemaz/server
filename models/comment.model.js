@@ -1,4 +1,6 @@
 const {model, Schema} = require('mongoose');
+const mongoose = require('mongoose')
+const autoIncrement = require('mongoose-auto-increment');
 
 const comment = new Schema({
     from: {
@@ -27,6 +29,14 @@ const comment = new Schema({
         updatedAt: 'updated_at'
     }
 });
+
+autoIncrement.initialize(mongoose.connection);
+comment.plugin(autoIncrement.plugin,{
+    model: "comment",
+    field: "id",
+    startAt: 1,
+    incrementBy: 1,
+}, 'comment');
 
 const Comment = model('comment', comment)
 

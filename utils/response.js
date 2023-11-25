@@ -10,10 +10,16 @@ const responseData = function (response, statusCode, values) {
     response.end;
 };
 
-const responseMessage = function (response, statusCode, message) {
+const responseMessage = function (response, statusCode, message, values) {
+    let success = false;
+    if (statusCode === 200 || statusCode === 201) {
+        success = true;
+    }
+
     let data = {
-        success: true,
-        message: message
+        success: success,
+        message: message,
+        data: values
     };
 
     response.status(statusCode).json(data);

@@ -1,6 +1,7 @@
 
 const mongoose = require('mongoose');
 const {MongoMemoryServer} = require('mongodb-memory-server');
+const autoIncrement = require('mongoose-auto-increment');
 const pino = require('pino');
 const logger = pino({level: 'info'});
 
@@ -17,6 +18,7 @@ const connectDB = async () => {
         };
 
         await mongoose.connect(uri, mongooseOpts);
+        autoIncrement.initialize(mongoose.connection);
         logger.info('successfully connect to mongodb.')
     } catch (err) {
         logger.error('failed connect to mongodb, error: ', err)

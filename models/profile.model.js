@@ -1,10 +1,10 @@
 const {model, Schema} = require('mongoose');
+const mongoose = require('mongoose')
+const autoIncrement = require('mongoose-auto-increment');
 
 const profile = new Schema({
     id: {
         type: Number,
-        default: 0,
-        startAt: 1
     },
     name: {
         type: String,
@@ -52,6 +52,14 @@ const profile = new Schema({
         updatedAt: 'updated_at'
     }
 });
+
+autoIncrement.initialize(mongoose.connection);
+profile.plugin(autoIncrement.plugin,{
+    model: "profile",
+    field: "id",
+    startAt: 1,
+    incrementBy: 1,
+}, 'profile');
 
 const Profile = model('profile', profile)
 

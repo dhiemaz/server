@@ -20,7 +20,7 @@ const insertComment = (async (data) => {
         return result;
     } catch (err) {
         logger.error(`insert new comment from id: ${data.from} for id: ${data.to}, error: ${err}`);
-        return err;
+        throw Error(err);
     }
 });
 
@@ -35,7 +35,7 @@ const getCommentByCommentId = (async (id) => {
         return result
     } catch (err) {
         logger.error(`failed get comment by comment id: ${id}, error: ${err}`)
-        return err;
+        throw Error(err);
     }
 });
 
@@ -50,7 +50,7 @@ const getCommentFromUserId = (async (id) => {
         return result
     } catch (err) {
         logger.error(`failed get comment from user: ${id}, error: ${err}`)
-        return err;
+        throw Error(err);
     }
 });
 
@@ -65,7 +65,7 @@ const getCommentToUserId = (async (id) => {
         return result
     } catch (err) {
         logger.error(`failed get comment to user: ${id}, error: ${err}`)
-        return err;
+        throw Error(err);
     }
 });
 
@@ -89,7 +89,7 @@ const likesComment = (async (id, action) => {
         return result;
     } catch (err) {
         logger.error(`failed ${action} comment id: ${id}, error: ${err}`)
-        return err;
+        throw Error(err);
     }
 })
 

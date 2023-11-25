@@ -2,6 +2,7 @@ const pino = require('pino');
 const logger = pino({level: 'info'});
 const {Profile} = require('../models/profile.model')
 const dummyProfile = require('../models/fixtures/profile.dummy.model')
+const e = require("express");
 
 /**
  * insertProfile user
@@ -26,7 +27,7 @@ const insertProfile = (async (data) => {
         return result;
     } catch (err) {
         logger.error(`failed create new profile, error: ${err}`);
-        return err;
+        throw Error(err);
     }
 });
 
@@ -41,7 +42,7 @@ const getProfile = (async (id) => {
         return result
     } catch (err) {
         logger.error(`failed get profile with id: ${id}, error: ${err}`)
-        return err;
+        throw Error(err);
     }
 });
 
@@ -52,7 +53,7 @@ const getProfiles = (async () => {
         return result
     } catch (err) {
         logger.error(`failed get all profile records, error: ${err}`)
-        return err;
+        throw Error(err);
     }
 });
 
