@@ -58,17 +58,33 @@ const getCommentFromUserId = (async (id) => {
  * getCommentToUserId
  * @type {(function(*): Promise<(Query<Array<EnforceDocument<unknown, {}>>, Document<any, any, unknown> & {}, {}, unknown> & {})|*|undefined>)|*}
  */
-const getCommentToUserId = (async (id, sortby) => {
-    let result = null;
+const getCommentToUserId = (async (id, sortby, filter, page, limit) => {
+    let sort = null;
+
+    let _pageNumber = parseInt(page);
+    let _pageSize = parseInt(limit);
+
+    // construct sort field
+    if (sortby === 'recent') {
+        sort = {'created_at':'desc'};
+    } else {
+        sort = {'likes':-1};
+    }
+
     try {
-        if (sortby === 'recent') {
-            result = await Comment.find({to: id}).sort({'created_at':'desc'});
-            logger.info(`successfully get comment to user: ${id} sortby: ${sortby}`);
-        } else {
-            result = await Comment.find({to: id}).sort({'likes':-1});
-            logger.info(`successfully get comment to user: ${id} sortby: ${sortby}`);
+        const count = await Comment.countDocuments({to: id});
+        const docs = await Comment.find({to: id}, {to: 0}).
+        sort(sort).
+        skip(_pageNumber > 0 ? ((_pageNumber - 1) * _pageSize) : 0).
+        limit(_pageSize).exec()
+
+        const result = {
+            total_count: count,
+            comments: docs
         }
-        return result
+
+        logger.info(`successfully get comment to user: ${id} sortby: ${sortby}`);
+        return result;
     } catch (err) {
         logger.error(`failed get comment to user: ${id}, error: ${err}`)
         throw Error(err);

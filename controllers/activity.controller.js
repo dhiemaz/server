@@ -67,8 +67,10 @@ const getCommentFrom = ((req, res) => {
  * getCommentTo
  * @type {getCommentTo}
  */
-const getCommentTo = ((req, res) => {
+const getCommentTo = (async (req, res) => {
     let sortBy = req.query.sortby;
+    let page = req.query.page;
+    let limit = req.query.limit;
 
     if (sortBy === undefined) {
         sortBy = "best"; // set default sortBy best (sort by most number of likes).
@@ -76,7 +78,9 @@ const getCommentTo = ((req, res) => {
 
     if (sortBy === "best" || sortBy === "recent") {
         logger.info(`get comment to: ${req.params.id} with sortby: ${sortBy}`);
-        getCommentToUserId(req.params.id, sortBy).then(function (result) {
+        await getCommentToUserId(req.params.id, sortBy, null, page, limit).then(function (result) {
+            logger.info(`result: ${result}`)
+
             if (result) {
                 responseMessage(res, 200, 'success', result);
             } else {
