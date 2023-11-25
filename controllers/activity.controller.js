@@ -37,7 +37,7 @@ const sendLikes = (async (req, res) => {
  * @type {sendComment}
  */
 const sendComment = ((req, res) => {
-    logger.info('get all profile records');
+    logger.info('posting comment');
     let data = {...req.body}
     insertComment(data).then(function (result) {
         responseMessage(res, 200, 'success', result);
@@ -51,7 +51,7 @@ const sendComment = ((req, res) => {
  * @type {getCommentFrom}
  */
 const getCommentFrom = ((req, res) => {
-    logger.info(`get for comment from: ${req.params.id}`);
+    logger.info(`get comment from: ${req.params.id}`);
     getCommentFromUserId(req.params.id).then(function (result) {
         if (result) {
             responseMessage(res, 200, 'success', result);
@@ -68,7 +68,7 @@ const getCommentFrom = ((req, res) => {
  * @type {getCommentTo}
  */
 const getCommentTo = ((req, res) => {
-    logger.info(`get for comment to: ${req.params.id}`);
+    logger.info(`get comment to: ${req.params.id}`);
     getCommentToUserId(req.params.id).then(function (result) {
         if (result) {
             responseMessage(res, 200, 'success', result);
