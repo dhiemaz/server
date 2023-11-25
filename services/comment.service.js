@@ -58,10 +58,16 @@ const getCommentFromUserId = (async (id) => {
  * getCommentToUserId
  * @type {(function(*): Promise<(Query<Array<EnforceDocument<unknown, {}>>, Document<any, any, unknown> & {}, {}, unknown> & {})|*|undefined>)|*}
  */
-const getCommentToUserId = (async (id) => {
+const getCommentToUserId = (async (id, sortby) => {
+    let result = null;
     try {
-        let result = await Comment.find({to: id});
-        logger.info(`successfully get comment to user: ${id}`);
+        if (sortby === 'recent') {
+            result = await Comment.find({to: id}).sort({'created_at':'desc'});
+            logger.info(`successfully get comment to user: ${id} sortby: ${sortby}`);
+        } else {
+            result = await Comment.find({to: id}).sort({'likes':-1});
+            logger.info(`successfully get comment to user: ${id} sortby: ${sortby}`);
+        }
         return result
     } catch (err) {
         logger.error(`failed get comment to user: ${id}, error: ${err}`)

@@ -68,16 +68,26 @@ const getCommentFrom = ((req, res) => {
  * @type {getCommentTo}
  */
 const getCommentTo = ((req, res) => {
-    logger.info(`get comment to: ${req.params.id}`);
-    getCommentToUserId(req.params.id).then(function (result) {
-        if (result) {
-            responseMessage(res, 200, 'success', result);
-        } else {
-            responseMessage(res, 404, 'not found', result);
-        }
-    }).catch(function (err) {
-        responseMessage(res, 500, `failed get comment to ${req.params.id}, ${err}`, null);
-    });
+    let sortBy = req.query.sortby;
+
+    if (sortBy === undefined) {
+        sortBy = "best"; // set default sortBy best (sort by most number of likes).
+    }
+
+    if (sortBy === "best" || sortBy === "recent") {
+        logger.info(`get comment to: ${req.params.id} with sortby: ${sortBy}`);
+        getCommentToUserId(req.params.id, sortBy).then(function (result) {
+            if (result) {
+                responseMessage(res, 200, 'success', result);
+            } else {
+                responseMessage(res, 404, 'not found', result);
+            }
+        }).catch(function (err) {
+            responseMessage(res, 500, `failed get comment to ${req.params.id}, ${err}`, null);
+        });
+    } else {
+        responseMessage(res, 422, `unrecognized sortby: [${sortBy}]`, null);
+    }
 })
 
 module.exports = {
