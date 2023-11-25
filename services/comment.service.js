@@ -69,19 +69,12 @@ const getCommentToUserId = (async (id) => {
     }
 });
 
-const sortingCommentToUserId = (async (sortBy, id) => {
-    try {
-        let result = await Comment.find({to: id});
-        logger.info(`successfully get comment to user: ${id}`);
-        return result
-    } catch (err) {
-        logger.error(`failed get comment to user: ${id}, error: ${err}`)
-        return err;
-    }
-});
-
+/**
+ * likesComment
+ * @type {(function(*, *): Promise<Error|(Query<Document<any, any, unknown> & {}, Document<any, any, unknown> & {}, {}, unknown> & {})|*|undefined>)|*}
+ */
 const likesComment = (async (id, action) => {
-    const counter = action === 'Like' ? 1 : -1;
+    const counter = action === 'like' ? 1 : -1;
     try {
         let result = await Comment.findOneAndUpdate(
             {_id: id},
@@ -92,10 +85,10 @@ const likesComment = (async (id, action) => {
             return new Error('cannot find comment.');
         }
 
-        logger.info(`successfully update comment likes for id: ${id}, result: ${result}`);
+        logger.info(`successfully ${action} comment id: ${id}, result: ${result}`);
         return result;
     } catch (err) {
-        logger.error(`failed update comment likes for id: ${id}, error: ${err}`)
+        logger.error(`failed ${action} comment id: ${id}, error: ${err}`)
         return err;
     }
 })
