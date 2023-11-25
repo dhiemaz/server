@@ -30,10 +30,16 @@ const responseMessage = function (response, statusCode, message, values) {
     response.end;
 };
 
-const responseView = function (response, data) {
-    response.render('profile_template', {
-        profile: data,
-    });
+const responseView = function (response, statusCode, data) {
+    if (statusCode === 200) {
+        response.render('profile_template', {
+            profile: data,
+        });
+    } else {
+        response.render('404', {
+            profile: data,
+        });
+    }
 
     response.end;
 }

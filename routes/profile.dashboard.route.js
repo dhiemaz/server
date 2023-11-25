@@ -6,6 +6,6 @@ const {
     viewDashboardProfile
 } = require('../controllers/profile.controller')
 
-router.get('/', viewDashboardProfile);
+router.get('/dashboard/profile/:id', viewDashboardProfile);
 
 module.exports = router;

@@ -63,14 +63,17 @@ const createProfile = (async (req, res) => {
  * viewDashboardProfile
  * @type {viewDashboardProfile}
  */
-const viewDashboardProfile = ((req, res) => {
-    logger.info('view dashboard profile');
-    try {
-        let profile = viewProfile();
-        responseView(res, profile);
-    } catch (err) {
-        logger.error(`failed view dashboard profile, error: ${err}`);
-    }
+const viewDashboardProfile = (async (req, res) => {
+    logger.info(`view dashboard profile by id: ${req.params.id}`);
+    await getProfile(req.params.id).then(function (profile) {
+        if (profile) {
+            responseView(res, 200, profile);
+        } else {
+            responseView(res, 404, null);
+        }
+    }).catch(function (err) {
+        responseView(res, 500, null);
+    });
 })
 
 module.exports = {
