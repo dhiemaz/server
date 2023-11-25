@@ -12,7 +12,7 @@ const insertComment = (async (data) => {
         to: data.to,
         title: data.title,
         comment: data.comment,
-        likes: data.likes
+        likes: 0
     })
     try {
         const result = await newComment.save();
@@ -77,12 +77,12 @@ const likesComment = (async (id, action) => {
     const counter = action === 'like' ? 1 : -1;
     try {
         let result = await Comment.findOneAndUpdate(
-            {_id: id},
+            {id: id},
             {$inc: {likes: counter}},
             {new: true, useFindAndModify: false})
 
         if (result === null) {
-            return new Error('cannot find comment.');
+            return null;
         }
 
         logger.info(`successfully ${action} comment id: ${id}, result: ${result}`);

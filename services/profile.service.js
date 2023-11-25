@@ -37,7 +37,7 @@ const insertProfile = (async (data) => {
  */
 const getProfile = (async (id) => {
     try {
-        let result = await Profile.findById(id);
+        let result = await Profile.findOne({id: id});
         logger.info(`get profile with id: ${id}, result: ${result}`);
         return result
     } catch (err) {

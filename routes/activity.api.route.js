@@ -11,7 +11,7 @@ const {
 
 router.use(express.json());
 router.post('/user/activity/:act/:id', sendLikes);
-router.post('/user/activty/comment', sendComment);
+router.post('/user/activity/comment', sendComment);
 router.get('/user/activity/comment/to/:id', getCommentTo);
 router.get('/user/activity/comment/from/:id', getCommentFrom);
 

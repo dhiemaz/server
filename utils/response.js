@@ -1,12 +1,16 @@
+'use strict';
 // utils response
 // this code is for construct response message and data either success or error
+
+const omitEmpty = require('omit-empty');
+
 const responseData = function (response, statusCode, values) {
     let data = {
         success : true,
         data : values
     };
 
-    response.status(statusCode).json(data);
+    response.status(statusCode).json(omitEmpty(data));
     response.end;
 };
 

@@ -15,18 +15,21 @@ const {responseMessage, responseData, responseView} = require("../utils/response
  * sendLikes
  * @type {sendLikes}
  */
-const sendLikes = ((req, res) => {
-    logger.info(`${req.params.act} for comment: ${req.params.id}`);
-    likesComment(req.params.id, req.params.act).then(function (result) {
-        if (result) {
-            responseMessage(res, 200, 'success', result);
-        } else {
-            responseMessage(res, 422, 'failed', result);
-        }
-    }).catch(function (err) {
-        logger.error(`failed send ${req.params.act} to comment: ${req.params.id}, error: ${err}`)
-        responseMessage(res, 500, err.toString())
-    });
+const sendLikes = (async (req, res) => {
+    logger.info(`${req.params.act} for comment: ${req.params.id}`)
+    if (req.params.act === 'like' || req.params.act === 'unlike') {
+        await likesComment(req.params.id, req.params.act).then(function (result) {
+            if (result) {
+                responseMessage(res, 200, 'success', result);
+            } else {
+                responseMessage(res, 404, `failed send ${req.params.act} to comment: ${req.params.id}, comment not found`, result);
+            }
+        }).catch(function (err) {
+            responseMessage(res, 422, `failed send ${req.params.act} to comment: ${req.params.id}, ${err}`, null);
+        });
+    } else {
+        responseMessage(res, 422, `failed send ${req.params.act} to comment: ${req.params.id}, not recognized action [${req.params.act}]`, null);
+    }
 })
 
 /**
@@ -37,14 +40,9 @@ const sendComment = ((req, res) => {
     logger.info('get all profile records');
     let data = {...req.body}
     insertComment(data).then(function (result) {
-        if (result) {
-            responseMessage(res, 200, 'success', result);
-        } else {
-            responseMessage(res, 422, 'failed', result);
-        }
+        responseMessage(res, 200, 'success', result);
     }).catch(function (err) {
-        logger.error(`failed post comment, error: ${err}`)
-        responseMessage(res, 500, err.toString())
+        responseMessage(res, 422, `failed post comment, ${err}`, null);
     });
 })
 
@@ -61,7 +59,7 @@ const getCommentFrom = ((req, res) => {
             responseMessage(res, 404, 'not found', result);
         }
     }).catch(function (err) {
-        responseMessage(res, 500, err.toString());
+        responseMessage(res, 500, `failed get comment from ${req.params.id}, ${err}`, null);
     });
 })
 
@@ -78,7 +76,7 @@ const getCommentTo = ((req, res) => {
             responseMessage(res, 404, 'not found', result);
         }
     }).catch(function (err) {
-        responseMessage(res, 500, err.toString());
+        responseMessage(res, 500, `failed get comment to ${req.params.id}, ${err}`, null);
     });
 })
 

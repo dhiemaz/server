@@ -21,7 +21,7 @@ const comment = new Schema({
     },
     likes: {
         type: Number,
-        required: true
+        startAt: 0
     }
 },{
     timestamps: {

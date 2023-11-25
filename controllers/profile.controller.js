@@ -18,12 +18,12 @@ const findProfile = (async (req, res) => {
     logger.info(`get profile by id: ${req.params.id}`);
     await getProfile(req.params.id).then(function (profile) {
         if (profile) {
-            responseData(res, 200, profile);
+            responseMessage(res, 200, 'success', profile);
         } else {
-            responseData(res, 404, profile);
+            responseMessage(res, 404, 'not found',profile);
         }
     }).catch(function (err) {
-        logger.error(`failed get profile by id: ${req.params.id}, error: ${err}`)
+        responseMessage(res, 500, `failed find profile with id: ${req.params.id}, ${err}.`, null);
     });
 })
 
@@ -40,7 +40,7 @@ const getAllProfiles = (async (req, res) => {
             responseMessage(res, 404, 'not found', profile);
         }
     }).catch(function (err) {
-        logger.error(`failed get all profile records, error: ${err}`)
+        responseMessage(res, 500, `failed get all profiles, ${err}.`, null);
     });
 })
 
@@ -67,7 +67,7 @@ const viewDashboardProfile = ((req, res) => {
     logger.info('view dashboard profile');
     try {
         let profile = viewProfile();
-        responseView(res, profile)
+        responseView(res, profile);
     } catch (err) {
         logger.error(`failed view dashboard profile, error: ${err}`);
     }
@@ -78,4 +78,4 @@ module.exports = {
     getAllProfiles,
     createProfile,
     viewDashboardProfile
-}
+};
