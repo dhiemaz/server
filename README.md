@@ -124,6 +124,14 @@ _c. sortby (recent or best)_
 _d. page and limit is for paging_
 
 
+* user profile page (web)
+
+```http request
+http://localhost:3000/dashboard/profile/<profile_id>
+```
+
+_note : change <profile_id> with user profile id_
+
 See postman folder for postman collection file.
 
 ## Todo
