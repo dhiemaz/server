@@ -36,7 +36,6 @@ boo-world server code challenge built with node with expressjs
 
 ```
 
-
 ## How to run
 ### Running Unit Test
 ```bash
@@ -56,5 +55,75 @@ $npm run start
 ### Run server using docker
 This project supported with docker, it's meant that you can run this project using `docker` command
 
+
+### List of endpoint API
+* (POST) create user profile
+```curl
+curl --location --request POST 'http://localhost:3000/api/user/profile' \
+--header 'Content-Type: application/json' \
+--data-raw '{
+    "name": "B Martinez",
+    "description": "Adolph Larrue Martinez III.",
+    "mbti": "ISFJ",
+    "enneagram": "9w3",
+    "variant": "sp/so",
+    "tritype": 725,
+    "socionics": "SEE",
+    "sloan": "RCOEN",
+    "psyche": "FEVL"
+}'
+```
+
+* (GET) user profile by id
+```curl 
+curl --location --request GET 'http://localhost:3000/api/user/profile/<profile_id>' \
+--data-raw ''
+
+```
+_note: change <profile_id> with saved profile id_
+
+* (POST) send comment
+```curl 
+curl --location --request POST 'http://localhost:3000/api/user/activity/comment' \
+--header 'Content-Type: application/json' \
+--data-raw '{
+    "from": 3,
+    "to": 2,
+    "mbti": null,
+    "enneagram": "6w5",
+    "zodiac": "Aquarius",
+    "title": "test comment",
+    "comment": "This is a test comment!"
+}'
+```
+_note: mbti, enneagram and zodiac are optional, if we are not send then put it as null._
+
+* (POST) like or unlike comment
+```curl 
+curl --location --request POST 'http://localhost:3000/api/user/activity/<action>/<comment_id>'
+```
+_note:_ 
+
+_a. change <action> to like or unlike_
+
+_b. change <comment_id> with target comment_id_
+
+* (GET) comment to profile id (with sort and filter)
+```curl
+curl --location --request GET 'http://localhost:3000/api/user/activity/comment/to/<to_profile_id>?mbti=true&enneagram=true&zodiac=true&page=1&limit=10&sortby=best'
+```
+
+_note:_ 
+
+_a. change <to_profile_id> with profile_id_ 
+
+_b. mbti, enneagram, and zodiac set to true if we want result filtered with personality system_
+
+_c. sortby (recent or best)_
+
+_d. page and limit is for paging_
+
+
+See postman folder for postman collection file.
 
 ## Todo
