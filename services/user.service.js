@@ -1,6 +1,7 @@
 const pino = require('pino');
 const logger = pino({level: 'info'});
 const {User} = require('../models/user.model')
+const e = require("express");
 
 /**
  * insertUser
@@ -20,6 +21,38 @@ const insertUser = (async (data) => {
     }
 });
 
+const getUser = (async (name) => {
+    try {
+        let user = await User.findOne({name: name});
+        if (!user) {
+            throw Error(`user ${name} is not found.`);
+        }
+
+        logger.info(`get user: ${name}, result: ${user}`);
+        return user;
+    }catch (err) {
+        logger.error(`failed get user: ${name}, error: ${err}`);
+        throw Error(err);
+    }
+})
+
+const isUserExist = (async (name) => {
+    try {
+        let user = await User.findOne({name: name});
+        if (!user) {
+            return false;
+        }
+
+        logger.info(`get user: ${name}, result: user is exist.`);
+        return true;
+    }catch (err) {
+        logger.error(`failed get user: ${name}, error: ${err}`);
+        return false;
+    }
+})
+
 module.exports = {
-    insertUser
+    insertUser,
+    getUser,
+    isUserExist
 }

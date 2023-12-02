@@ -1,7 +1,7 @@
 const pino = require('pino');
 const logger = pino({level: 'info'});
 const {Comment} = require('../models/comment.model');
-const {User} = require('../models/user.model');
+const userService = require('../services/user.service');
 
 /**
  * insertComment from user to another user
@@ -20,14 +20,14 @@ const insertComment = (async (data) => {
     })
     try {
         // validate user comment, check if user is exist by query to database.
-        let toUser = await User.findOne({name: data.to});
+        let toUser = userService.isUserExist(data.to);
         if (!toUser) {
-            throw Error(`user: ${data.to} is not found.`)
+            throw Error(`user ${data.to} is not exist.`);
         }
 
-        let fromUser = await User.findOne({name: data.from});
+        let fromUser = userService.isUserExist(data.from);
         if (!fromUser) {
-            throw Error(`user: ${data.from} is not found.`)
+            throw Error(`user ${data.from} is not exist.`);
         }
 
         const result = await newComment.save();
