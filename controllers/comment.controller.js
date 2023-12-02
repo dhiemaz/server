@@ -12,10 +12,10 @@ const {
 const {responseMessage, responseData, responseView} = require("../utils/response");
 
 /**
- * sendLikes
- * @type {sendLikes}
+ * likeUnlikeComment
+ * @type {likeUnlikeComment}
  */
-const sendLikes = (async (req, res) => {
+const likeUnlikeComment = (async (req, res) => {
     logger.info(`${req.params.act} for comment: ${req.params.id}`)
     if (req.params.act === 'like' || req.params.act === 'unlike') {
         await likesComment(req.params.id, req.params.act).then(function (result) {
@@ -99,7 +99,7 @@ const getCommentTo = (async (req, res) => {
 })
 
 module.exports = {
-    sendLikes,
+    likeUnlikeComment,
     sendComment,
     getCommentFrom,
     getCommentTo

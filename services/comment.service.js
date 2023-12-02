@@ -1,6 +1,7 @@
 const pino = require('pino');
 const logger = pino({level: 'info'});
-const {Comment} = require('../models/comment.model')
+const {Comment} = require('../models/comment.model');
+const {User} = require('../models/user.model');
 
 /**
  * insertComment from user to another user
@@ -18,11 +19,22 @@ const insertComment = (async (data) => {
         likes: 0
     })
     try {
+        // validate user comment, check if user is exist by query to database.
+        let toUser = await User.findOne({name: data.to});
+        if (!toUser) {
+            throw Error(`user: ${data.to} is not found.`)
+        }
+
+        let fromUser = await User.findOne({name: data.from});
+        if (!fromUser) {
+            throw Error(`user: ${data.from} is not found.`)
+        }
+
         const result = await newComment.save();
-        logger.info(`insert new comment from id: ${data.from} for id: ${data.to}`);
+        logger.info(`insert new comment from: ${data.from} to: ${data.to}`);
         return result;
     } catch (err) {
-        logger.error(`insert new comment from id: ${data.from} for id: ${data.to}, error: ${err}`);
+        logger.error(`insert new comment from: ${data.from} to: ${data.to}, error: ${err}`);
         throw Error(err);
     }
 });
@@ -43,25 +55,25 @@ const getCommentByCommentId = (async (id) => {
 });
 
 /**
- * getCommentFromUserId
+ * getCommentFromUser
  * @type {(function(*): Promise<(Query<Array<EnforceDocument<unknown, {}>>, Document<any, any, unknown> & {}, {}, unknown> & {})|*|undefined>)|*}
  */
-const getCommentFromUserId = (async (id) => {
+const getCommentFromUser = (async (name) => {
     try {
-        const result = await Comment.find({from: id});
-        logger.info(`successfully get comment from user: ${id}, result: ${result}`);
+        const result = await Comment.find({from: name});
+        logger.info(`successfully get comment from user: ${name}, result: ${result}`);
         return result
     } catch (err) {
-        logger.error(`failed get comment from user: ${id}, error: ${err}`)
+        logger.error(`failed get comment from user: ${name}, error: ${err}`)
         throw Error(err);
     }
 });
 
 /**
- * getCommentToUserId
+ * getCommentToUser
  * @type {(function(*): Promise<(Query<Array<EnforceDocument<unknown, {}>>, Document<any, any, unknown> & {}, {}, unknown> & {})|*|undefined>)|*}
  */
-const getCommentToUserId = (async (id, sortby, filter, page, limit) => {
+const getCommentToUser = (async (name, sortby, filter, page, limit) => {
     let sort = null;
 
     let _pageNumber = parseInt(page);
@@ -82,7 +94,7 @@ const getCommentToUserId = (async (id, sortby, filter, page, limit) => {
         const count = await Comment.countDocuments({
             $and:[{to: id}, mbti, enneagram, zodiac]
         });
-        const docs = await Comment.find({$and:[{to: id}, mbti, enneagram, zodiac]}, {to: 0}).
+        const docs = await Comment.find({$and:[{to: name}, mbti, enneagram, zodiac]}, {to: 0}).
         sort(sort).
         skip(_pageNumber > 0 ? ((_pageNumber - 1) * _pageSize) : 0).
         limit(_pageSize).exec()
@@ -129,7 +141,7 @@ const likesComment = (async (id, action) => {
 module.exports = {
     insertComment,
     getCommentByCommentId,
-    getCommentFromUserId,
-    getCommentToUserId,
+    getCommentFromUser,
+    getCommentToUser,
     likesComment
 }

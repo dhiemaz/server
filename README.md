@@ -18,8 +18,8 @@ boo-world server code challenge built with node with expressjs
 ├── services
 │   └── profile.service.route.js
 ├── routes
-│   └── profile.api.route.js
-│   └── profile.dashboard.route.js
+│   └── profile.route.js
+│   └── web.profile.route.js
 ├── utils
 │   └── response.js
 │   └── validation.js

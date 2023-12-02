@@ -1,8 +1,6 @@
 const pino = require('pino');
 const logger = pino({level: 'info'});
 const {Profile} = require('../models/profile.model')
-const dummyProfile = require('../models/fixtures/profile.dummy.model')
-const e = require("express");
 
 /**
  * insertProfile user
@@ -55,15 +53,6 @@ const getProfiles = (async () => {
         logger.error(`failed get all profile records, error: ${err}`)
         throw Error(err);
     }
-});
-
-/**
- * viewProfile from dummy profile
- * @type {function(): {psyche: string, image: string, sloan: string, enneagram: string, name: string, variant: string, description: string, mbti: string, id: number, tritype: number, socionics: string}}
- */
-const viewProfile = (() => {
-    logger.info(`get profiles using dummy profile data, result: ${dummyProfile.profiles[0]}`);
-    return dummyProfile.profiles[0];
 });
 
 module.exports = {

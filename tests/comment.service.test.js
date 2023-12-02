@@ -2,8 +2,8 @@ const dbHandler = require('../database/mongo.database')
 const commentService = require('../services/comment.service')
 
 const commentData = {
-    from: "6557c05402b3eb42e6c67755",
-    to: "6557c05402b3eb42e6c68855",
+    from: "evan",
+    to: "luke",
     title: "test comment",
     comment: "This is a test comment!",
     likes: 0
@@ -57,7 +57,7 @@ describe('comment test suite', () => {
         let err = null;
         let comment = null;
 
-        await commentService.getCommentFromUserId(commentSend.from).then(function (result) {
+        await commentService.getCommentFromUser(commentSend.from).then(function (result) {
             comment = result;
             console.log(`result: ${comment}`)
         }).catch(function (err) {

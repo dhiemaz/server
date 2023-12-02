@@ -5,25 +5,36 @@ const logger = pino({level: 'info'})
 const {
     insertProfile,
     getProfiles,
-    getProfile,
-    viewProfile
+    getProfile
 } = require('../services/profile.service')
 const {responseMessage, responseData, responseView} = require("../utils/response");
 
 /**
- * findProfile by id
- * @type {findProfile}
+ * viewProfile by id
+ * @type {viewProfile}
  */
-const findProfile = (async (req, res) => {
-    logger.info(`get profile by id: ${req.params.id}`);
+const viewProfile = (async (req, res) => {
+    logger.info(`view profile id: ${req.params.id}`);
     await getProfile(req.params.id).then(function (profile) {
         if (profile) {
-            responseMessage(res, 200, 'success', profile);
+            if (req.is('application/json')) {
+                responseMessage(res, 200, 'success', profile);
+            } else {
+                responseView(res, 200, profile);
+            }
         } else {
-            responseMessage(res, 404, 'not found',profile);
+            if (req.is('application/json')) {
+                responseMessage(res, 404, 'not found',profile);
+            } else {
+                responseView(res, 404, null);
+            }
         }
     }).catch(function (err) {
-        responseMessage(res, 500, `failed find profile with id: ${req.params.id}, ${err}.`, null);
+        if (req.is('application/json')) {
+            responseMessage(res, 500, `failed find profile with id: ${req.params.id}, ${err}.`, null);
+        } else {
+            responseView(res, 404, null);
+        }
     });
 })
 
@@ -59,26 +70,8 @@ const createProfile = (async (req, res) => {
     });
 })
 
-/**
- * viewDashboardProfile
- * @type {viewDashboardProfile}
- */
-const viewDashboardProfile = (async (req, res) => {
-    logger.info(`view dashboard profile by id: ${req.params.id}`);
-    await getProfile(req.params.id).then(function (profile) {
-        if (profile) {
-            responseView(res, 200, profile);
-        } else {
-            responseView(res, 404, null);
-        }
-    }).catch(function (err) {
-        responseView(res, 500, null);
-    });
-})
-
 module.exports = {
-    findProfile,
     getAllProfiles,
     createProfile,
-    viewDashboardProfile
+    viewProfile
 };
