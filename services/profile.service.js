@@ -1,6 +1,7 @@
 const pino = require('pino');
 const logger = pino({level: 'info'});
 const {Profile} = require('../models/profile.model')
+const mongoose = require("mongoose");
 
 /**
  * insertProfile user
@@ -35,7 +36,7 @@ const insertProfile = (async (data) => {
  */
 const getProfile = (async (id) => {
     try {
-        let result = await Profile.findOne({id: id});
+        let result = await Profile.findOne({_id: mongoose.Types.ObjectId(id)});
         logger.info(`get profile with id: ${id}, result: ${result}`);
         return result
     } catch (err) {
@@ -58,6 +59,5 @@ const getProfiles = (async () => {
 module.exports = {
     insertProfile,
     getProfiles,
-    getProfile,
-    viewProfile
+    getProfile
 }

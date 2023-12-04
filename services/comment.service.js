@@ -35,16 +35,6 @@ const insertComment = (async (data) => {
         }
 
         const result = await newComment.save();
-        logger.info(`result: ${result}`);
-        if (result) {
-            User.findOneAndUpdate(
-                { name: data.to },
-                { $push: { comment: mongoose.Types.ObjectId(result._id) } },
-                { new: true, upsert: true }).then(data => {
-                logger.info(`tt: ${inspect(data)}`);
-            });
-        }
-
         logger.info(`insert new comment from: ${data.from} to: ${data.to}, id: ${result._id}`);
         return result;
     } catch (err) {
@@ -54,12 +44,17 @@ const insertComment = (async (data) => {
 });
 
 /**
- * getCommentByCommentId
+ * getByCommentId
  * @type {(function(*): Promise<(Query<any, any, {}, any> & {})|*|undefined>)|*}
  */
-const getCommentByCommentId = (async (id) => {
+const getByCommentId = (async (id) => {
     try {
         const result = await Comment.findById(id);
+        if (!result) {
+            logger.error(`failed get comment id: ${id}, error: comment not found`);
+            return null;
+        }
+
         logger.info(`successfully get comment by comment id: ${id}`);
         return result
     } catch (err) {
@@ -69,10 +64,10 @@ const getCommentByCommentId = (async (id) => {
 });
 
 /**
- * getCommentFromUser
+ * getCommentFrom
  * @type {(function(*): Promise<(Query<Array<EnforceDocument<unknown, {}>>, Document<any, any, unknown> & {}, {}, unknown> & {})|*|undefined>)|*}
  */
-const getCommentFromUser = (async (name) => {
+const getCommentFrom = (async (name) => {
     try {
         const result = await Comment.find().populate('user');
         logger.info(`successfully get comment from user: ${name}, result: ${result}`);
@@ -84,10 +79,10 @@ const getCommentFromUser = (async (name) => {
 });
 
 /**
- * getCommentToUser
+ * getCommentTo
  * @type {(function(*): Promise<(Query<Array<EnforceDocument<unknown, {}>>, Document<any, any, unknown> & {}, {}, unknown> & {})|*|undefined>)|*}
  */
-const getCommentToUser = (async (name, sortby, filter, page, limit) => {
+const getCommentTo = (async (id, sortby, filter, page, limit) => {
     let sort = null;
 
     let _pageNumber = parseInt(page);
@@ -108,7 +103,7 @@ const getCommentToUser = (async (name, sortby, filter, page, limit) => {
         const count = await Comment.countDocuments({
             $and:[{to: id}, mbti, enneagram, zodiac]
         });
-        const docs = await Comment.find({$and:[{to: name}, mbti, enneagram, zodiac]}, {to: 0}).
+        const docs = await Comment.find({$and:[{to: mongoose.Types.ObjectId(id)}, mbti, enneagram, zodiac]}, {to: 0}).
         sort(sort).
         skip(_pageNumber > 0 ? ((_pageNumber - 1) * _pageSize) : 0).
         limit(_pageSize).exec()
@@ -136,12 +131,13 @@ const likesComment = (async (id, action) => {
     const counter = action === 'like' ? 1 : -1;
     try {
         let result = await Comment.findOneAndUpdate(
-            {id: id},
+            {_id: mongoose.Types.ObjectId(id)},
             {$inc: {likes: counter}},
             {new: true, useFindAndModify: false})
 
         if (result === null) {
-            return null;
+            logger.error(`failed ${action} comment id: ${id}, result: comment not found`);
+            return Promise.reject('comment not found');
         }
 
         logger.info(`successfully ${action} comment id: ${id}, result: ${result}`);
@@ -154,8 +150,8 @@ const likesComment = (async (id, action) => {
 
 module.exports = {
     insertComment,
-    getCommentByCommentId,
-    getCommentFromUser,
-    getCommentToUser,
+    getByCommentId,
+    getCommentFrom,
+    getCommentTo,
     likesComment
 }
