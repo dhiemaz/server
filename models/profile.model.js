@@ -1,5 +1,5 @@
 const {model, Schema} = require('mongoose');
-const mongoose = require('mongoose')
+const mongoose = require('mongoose');
 const autoIncrement = require('mongoose-auto-increment');
 
 const profile = new Schema({

@@ -4,10 +4,12 @@ const autoIncrement = require('mongoose-auto-increment');
 
 const comment = new Schema({
     from: {
-        type: {type: mongoose.Types.ObjectId, ref: "user"},
+        type: mongoose.Types.ObjectId, ref: "user",
+        required: true,
     },
     to: {
-        type: {type: mongoose.Types.ObjectId, ref: "user"},
+        type: mongoose.Types.ObjectId, ref: "user",
+        required: true,
     },
     mbti: {
         type: String,

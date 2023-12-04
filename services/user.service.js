@@ -1,5 +1,6 @@
 const pino = require('pino');
 const logger = pino({level: 'info'});
+const mongoose = require('mongoose')
 const {User} = require('../models/user.model')
 const e = require("express");
 
@@ -13,7 +14,7 @@ const insertUser = (async (data) => {
     })
     try {
         let result = await newUser.save();
-        logger.info(`creating new user with id: ${result._id}`);
+        logger.info(`successfully create new user id: ${result._id}`);
         return result;
     } catch (err) {
         logger.error(`failed create new user, error: ${err}`);
@@ -21,35 +22,37 @@ const insertUser = (async (data) => {
     }
 });
 
-const getUser = (async (name) => {
+const getUser = (async (id) => {
     try {
-        let user = await User.findOne({name: name});
+        let user = await User.findOne({_id: mongoose.Types.ObjectId(id)});
         if (!user) {
-            throw Error(`user ${name} is not found.`);
+            logger.error(`get user: ${id}, result: user not found.`);
+            return Promise.reject(`user ${id} not found.`);
         }
 
-        logger.info(`get user: ${name}, result: ${user}`);
+        logger.info(`get user: ${id}, result: ${user}`);
         return user;
     }catch (err) {
-        logger.error(`failed get user: ${name}, error: ${err}`);
-        throw Error(err);
+        logger.error(`failed get user: ${id}, error: ${err}`);
+        return Promise.reject(err);
     }
-})
+});
 
-const isUserExist = (async (name) => {
+const isUserExist = (async (id) => {
     try {
-        let user = await User.findOne({name: name});
+        let user = await User.findOne({_id: mongoose.Types.ObjectId(id)});
         if (!user) {
+            logger.error(`get user: ${id}, result: user not found.`);
             return false;
         }
 
-        logger.info(`get user: ${name}, result: user is exist.`);
+        logger.info(`get user: ${id}, result: user exist.`);
         return true;
     }catch (err) {
-        logger.error(`failed get user: ${name}, error: ${err}`);
+        logger.error(`failed get user: ${id}, error: ${err}`);
         return false;
     }
-})
+});
 
 module.exports = {
     insertUser,

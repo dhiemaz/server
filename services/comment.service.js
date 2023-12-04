@@ -1,7 +1,10 @@
 const pino = require('pino');
 const logger = pino({level: 'info'});
+const mongoose = require('mongoose');
 const {Comment} = require('../models/comment.model');
-const userService = require('../services/user.service');
+const {User} = require('../models/user.model');
+const {isUserExist} = require("./user.service");
+const {inspect} = require('util')
 
 /**
  * insertComment from user to another user
@@ -18,24 +21,35 @@ const insertComment = (async (data) => {
         comment: data.comment,
         likes: 0
     })
+
     try {
         // validate user comment, check if user is exist by query to database.
-        let toUser = userService.isUserExist(data.to);
+        const toUser = await isUserExist(data.to);
         if (!toUser) {
-            throw Error(`user ${data.to} is not exist.`);
+            return Promise.reject(`user ${data.to} is not found.`);
         }
 
-        let fromUser = userService.isUserExist(data.from);
+        const fromUser = await isUserExist(data.from);
         if (!fromUser) {
-            throw Error(`user ${data.from} is not exist.`);
+            return Promise.reject(`user ${data.from} is not found.`);
         }
 
         const result = await newComment.save();
-        logger.info(`insert new comment from: ${data.from} to: ${data.to}`);
+        logger.info(`result: ${result}`);
+        if (result) {
+            User.findOneAndUpdate(
+                { name: data.to },
+                { $push: { comment: mongoose.Types.ObjectId(result._id) } },
+                { new: true, upsert: true }).then(data => {
+                logger.info(`tt: ${inspect(data)}`);
+            });
+        }
+
+        logger.info(`insert new comment from: ${data.from} to: ${data.to}, id: ${result._id}`);
         return result;
     } catch (err) {
         logger.error(`insert new comment from: ${data.from} to: ${data.to}, error: ${err}`);
-        throw Error(err);
+        return Promise.reject(err);
     }
 });
 
@@ -60,7 +74,7 @@ const getCommentByCommentId = (async (id) => {
  */
 const getCommentFromUser = (async (name) => {
     try {
-        const result = await Comment.find({from: name});
+        const result = await Comment.find().populate('user');
         logger.info(`successfully get comment from user: ${name}, result: ${result}`);
         return result
     } catch (err) {
