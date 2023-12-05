@@ -3,16 +3,14 @@
 const express = require('express');
 const router = express.Router();
 const {
-    findProfile,
-    getAllProfiles,
-    createProfile,
-    viewProfile
-} = require('../controllers/profile.controller')
+    createUser,
+    findUser
+} = require('../controllers/user.controller')
 
 router.use(express.json());
 
 router.post('/user', createUser);
-router.get('/user/:name', getUser);
+router.get('/user/:id', findUser);
 
 module.exports = router;
 

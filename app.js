@@ -5,7 +5,8 @@ const app = express();
 const bodyParser = require('body-parser')
 const port =  process.env.PORT || 3000;
 const profileRoute = require('./routes/profile.route');
-const activityRoute = require('./routes/comment.route');
+const commentRoute = require('./routes/comment.route');
+const userRoute = require('./routes/user.route');
 const dbHandler = require('./database/mongo.database')
 
 // database connection start
@@ -21,7 +22,7 @@ app.use(
 app.use(bodyParser.json());
 
 // routes
-app.use("/", profileRoute, activityRoute);
+app.use("/", profileRoute, commentRoute, userRoute);
 
 // start server
 const server = app.listen(port);

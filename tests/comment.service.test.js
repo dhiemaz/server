@@ -192,10 +192,8 @@ describe('comment test suite - negative case', () => {
 
         await commentService.likesComment('656e195847b9ce124eb5cfc6', 'like').then(data => {
             result = data;
-            console.log(`result: ${result}`)
         }).catch(function (e) {
             err = e;
-            console.log(`catch err: ${err}`);
         }).finally(function () {
             expect(err.toString()).toBe('comment not found');
         });

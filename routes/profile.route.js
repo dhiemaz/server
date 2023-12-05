@@ -15,9 +15,5 @@ router.post('/profile', createProfile);
 router.get('/profiles', getAllProfiles);
 router.get('/profile/:id', viewProfile);
 
-// user route
-router.post('/user', createUser);
-router.get('/user/:name', getUser);
-
 module.exports = router;
 

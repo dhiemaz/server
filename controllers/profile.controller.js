@@ -1,12 +1,12 @@
 'use strict';
 
 const pino = require("pino");
-const logger = pino({level: 'info'})
+const logger = pino({level: 'info'});
 const {
     insertProfile,
     getProfiles,
     getProfile
-} = require('../services/profile.service')
+} = require('../services/profile.service');
 const {responseMessage, responseData, responseView} = require("../utils/response");
 
 /**
