@@ -1,6 +1,5 @@
 const app = require("../app")
 const dbHandler = require('../database/mongo.database');
-const profileController = require('../controllers/profile.controller');
 const request = require("supertest")
 
 

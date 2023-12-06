@@ -9,7 +9,7 @@
     "dev": "nodemon server.js",
     "lint": "./node_modules/.bin/eslint ./",
     "lint-fix": "./node_modules/.bin/eslint ./ --fix",
-    "test": "jest --runInBand --detectOpenHandles"
+    "test": "jest --runInBand --detectOpenHandles --coverage"
   },
   "keywords": [
     "boo",
