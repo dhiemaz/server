@@ -1,6 +1,7 @@
 const app = require("../app")
 const dbHandler = require('../database/mongo.database');
 const profileController = require('../controllers/profile.controller');
+const request = require("supertest")
 
 
 /**
@@ -16,14 +17,25 @@ afterAll(async () => {
     await dbHandler.disconnectDB()
 });
 
-describe('profile test suite', () => {
+const profileData = {
+    name: "A Martinez",
+    description: "Adolph Larrue Martinez III.",
+    mbti: "ISFJ",
+    enneagram: "9w3",
+    variant: "sp/so",
+    tritype: 725,
+    socionics: "SEE",
+    sloan: "RCOEN",
+    psyche: "FEVL"
+};
+
+describe('profile test suite - positive case', () => {
     let err = null;
 
     it('can be created successfully', async () => {
-        let mReq = {};
         return request(app)
             .post("/profile")
-            .send(mReq)
-            .expect(422)
+            .send(profileData)
+            .expect(201)
     })
 });

@@ -2,8 +2,8 @@
 
 const express = require('express');
 const app = express();
-const bodyParser = require('body-parser')
-const port =  process.env.PORT || 3000;
+const bodyParser = require('body-parser');
+const cors = require("cors");
 const profileRoute = require('./routes/profile.route');
 const commentRoute = require('./routes/comment.route');
 const userRoute = require('./routes/user.route');
@@ -19,13 +19,11 @@ app.use(
         extended: false,
     })
 );
+
 app.use(bodyParser.json());
+app.use(cors());
 
 // routes
 app.use("/", profileRoute, commentRoute, userRoute);
 
-// start server
-const server = app.listen(port);
-console.log('Express started. Listening on %s', port);
-
-module.exports = {app, server};
+module.exports = app;
