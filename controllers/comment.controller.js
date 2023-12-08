@@ -5,8 +5,8 @@ const logger = pino({level: 'info'})
 const {
     insertComment,
     getCommentByCommentId,
-    getCommentFromUserId,
-    getCommentToUserId,
+    getCommentFrom,
+    getCommentTo,
     likesComment
 } = require('../services/comment.service')
 const {responseMessage, responseData, responseView} = require("../utils/response");
@@ -43,27 +43,23 @@ const sendComment = ((req, res) => {
 })
 
 /**
- * getCommentFrom
- * @type {getCommentFrom}
+ * viewCommentFrom
+ * @type {viewCommentFrom}
  */
-const getCommentFrom = ((req, res) => {
+const viewCommentFrom = (async (req, res) => {
     logger.info(`get comment from: ${req.params.id}`);
-    getCommentFromUserId(req.params.id).then(function (result) {
-        if (result) {
-            responseMessage(res, 200, 'success', result);
-        } else {
-            responseMessage(res, 404, 'not found', result);
-        }
+    await getCommentFrom(req.params.id).then(function (result) {
+        responseMessage(res, 200, 'success', result);
     }).catch(function (err) {
         responseMessage(res, 500, `failed get comment from ${req.params.id}, ${err}`, null);
     });
 })
 
 /**
- * getCommentTo
- * @type {getCommentTo}
+ * viewCommentTo
+ * @type {viewCommentTo}
  */
-const getCommentTo = (async (req, res) => {
+const viewCommentTo = (async (req, res) => {
     let sortBy = req.query.sortby;
     let page = req.query.page;
     let limit = req.query.limit;
@@ -80,7 +76,7 @@ const getCommentTo = (async (req, res) => {
 
     if (sortBy === "best" || sortBy === "recent") {
         logger.info(`get comment to: ${req.params.id} with sortby: ${sortBy}`);
-        await getCommentToUserId(req.params.id, sortBy, filter, page, limit).then(function (result) {
+        await getCommentTo(req.params.id, sortBy, filter, page, limit).then(function (result) {
             if (result) {
                 responseMessage(res, 200, 'success', result);
             } else {
@@ -97,6 +93,6 @@ const getCommentTo = (async (req, res) => {
 module.exports = {
     likeUnlikeComment,
     sendComment,
-    getCommentFrom,
-    getCommentTo
+    viewCommentFrom,
+    viewCommentTo
 }

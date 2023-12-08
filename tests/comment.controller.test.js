@@ -22,7 +22,7 @@ afterAll(async () => {
 });
 
 describe('comment test suite - positive case', () => {
-    let commentId = null;
+    let response = null;
 
     it('create user (first user)', async () => {
         const firstUser = {
@@ -71,27 +71,50 @@ describe('comment test suite - positive case', () => {
             .send(comment)
             .expect(function(res) {
                 console.log(JSON.stringify(res.body, null, 2));
-                commentId = res.body.data._id;
+                response = res;
             })
             .expect(200);
     })
 
     it('like comment process - positive flow', async () => {
         return request(app)
-            .post(`/user/comment/like/${commentId}`)
+            .post(`/user/comment/like/${response.body.data._id}`)
             .expect(function(res) {
                 console.log(JSON.stringify(res.body, null, 2));
-                commentId = res.body.data._id;
             })
             .expect(200);
     })
 
     it('unlike comment process - positive flow', async () => {
         return request(app)
-            .post(`/user/comment/unlike/${commentId}`)
+            .post(`/user/comment/unlike/${response.body.data._id}`)
             .expect(function(res) {
                 console.log(JSON.stringify(res.body, null, 2));
-                commentId = res.body.data._id;
+            })
+            .expect(200);
+    })
+
+    it('get comment from - positive flow', async () => {
+        return request(app)
+            .get(`/user/comment/from/${response.body.data.from}`)
+            .expect(function(res) {
+                console.log(JSON.stringify(res.body, null, 2));
+            })
+            .expect(200);
+    })
+
+    it('get comment to - positive flow', async () => {
+        let mbti = false;
+        let enneagram = true;
+        let zodiac = true;
+        let page = 1;
+        let limit = 10;
+        let sortby = "best";
+
+        return request(app)
+            .get(`/user/comment/to/${response.body.data.to}?mbti=${mbti}&enneagram=${enneagram}&zodiac=${zodiac}&page=${page}&limit=${limit}&sortby=${sortby}`)
+            .expect(function(res) {
+                console.log(JSON.stringify(res.body, null, 2));
             })
             .expect(200);
     })
@@ -136,6 +159,24 @@ describe('comment test suite - negative case', () => {
                 console.log(JSON.stringify(res.body, null, 2));
             })
             .expect(422);
+    })
+
+    it('get comment from failed comment not found - negative flow', async () => {
+        return request(app)
+            .get(`/user/comment/from/656e195847b9ce124eb5cfc6`)
+            .expect(function(res) {
+                console.log(JSON.stringify(res.body, null, 2));
+            })
+            .expect(200);
+    })
+
+    it('get comment from failed comment not found - negative flow', async () => {
+        return request(app)
+            .get(`/user/comment/from/halo`)
+            .expect(function(res) {
+                console.log(JSON.stringify(res.body, null, 2));
+            })
+            .expect(500);
     })
 
 });

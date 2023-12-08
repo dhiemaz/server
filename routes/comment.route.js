@@ -5,15 +5,15 @@ const router = express.Router();
 const {
     likeUnlikeComment,
     sendComment,
-    getCommentFrom,
-    getCommentTo
+    viewCommentTo,
+    viewCommentFrom
 } = require('../controllers/comment.controller')
 
 router.use(express.json());
 router.post('/user/comment/:act/:id', likeUnlikeComment);
 router.post('/user/comment', sendComment);
-router.get('/user/comment/to/:id', getCommentTo);
-router.get('/user/comment/from/:id', getCommentFrom);
+router.get('/user/comment/to/:id', viewCommentTo);
+router.get('/user/comment/from/:id', viewCommentFrom);
 
 module.exports = router;
 
