@@ -1,5 +1,6 @@
 const dbHandler = require('../database/mongo.database')
 const profileService = require('../services/profile.service')
+const util = require('util');
 
 /**
  * profileData example
@@ -30,7 +31,7 @@ afterAll(async () => {
     await dbHandler.disconnectDB()
 });
 
-describe('profile test suite', () => {
+describe('profile test suite - positive case', () => {
     let savedProfile = null;
     let err = null;
     /**
@@ -73,6 +74,26 @@ describe('profile test suite', () => {
         }).finally(function (){
             expect(err).toBeNull();
             expect(profiles.length).toBe(1);
+        });
+    })
+});
+
+describe('profile test suite - negative case', () => {
+    let err = null;
+
+    it('retrieve all profile records failed, no data', async () => {
+        let profiles = null;
+        let err = null;
+
+        await dbHandler.clearDB(); // force clean db so it will get the scenario of no data
+
+        await profileService.getProfiles().then(function (result){
+            profiles = result
+        }).catch(function (e) {
+            err = e;
+        }).finally(function (){
+            expect(err).toBeNull();
+            expect(profiles.length).toBe(0);
         });
     })
 });

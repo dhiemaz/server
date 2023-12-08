@@ -5,6 +5,7 @@ const {Comment} = require('../models/comment.model');
 const {User} = require('../models/user.model');
 const {isUserExist} = require("./user.service");
 const {inspect} = require('util')
+const {Error} = require("mongoose");
 
 /**
  * insertComment from user to another user
@@ -24,13 +25,13 @@ const insertComment = (async (data) => {
 
     try {
         // validate user comment, check if user is exist by query to database.
-        const toUser = await isUserExist(data.to);
-        if (!toUser) {
+        let toExist = await isUserExist(data.to);
+        if(!toExist) {
             return Promise.reject(`user ${data.to} is not found.`);
         }
 
-        const fromUser = await isUserExist(data.from);
-        if (!fromUser) {
+        let fromExist = await isUserExist(data.from);
+        if (!fromExist) {
             return Promise.reject(`user ${data.from} is not found.`);
         }
 
@@ -67,13 +68,13 @@ const getByCommentId = (async (id) => {
  * getCommentFrom
  * @type {(function(*): Promise<(Query<Array<EnforceDocument<unknown, {}>>, Document<any, any, unknown> & {}, {}, unknown> & {})|*|undefined>)|*}
  */
-const getCommentFrom = (async (name) => {
+const getCommentFrom = (async (id) => {
     try {
-        const result = await Comment.find().populate('user');
-        logger.info(`successfully get comment from user: ${name}, result: ${result}`);
+        const result = await Comment.find({from: mongoose.Types.ObjectId(id)});
+        logger.info(`successfully get comment from: ${id}, result: ${result}`);
         return result
     } catch (err) {
-        logger.error(`failed get comment from user: ${name}, error: ${err}`)
+        logger.error(`failed get comment from: ${name}, error: ${err}`)
         throw Error(err);
     }
 });

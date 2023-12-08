@@ -46,10 +46,11 @@ const getProfile = (async (id) => {
 });
 
 const getProfiles = (async () => {
+    let result = null;
     try {
-        let result = await Profile.find({});
+        result = await Profile.find({});
         logger.info(`get all profile records, result: ${result}`);
-        return result
+        return result;
     } catch (err) {
         logger.error(`failed get all profile records, error: ${err}`)
         throw Error(err);

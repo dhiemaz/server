@@ -36,19 +36,6 @@ describe('comment test suite - positive case', () => {
     };
 
     /**
-     * tests that valid profile can be created through profile services with failed (no user exist)
-     */
-    // it('comment send with failed', async () => {
-    //     await commentService.insertComment(commentData).then(function (result) {
-    //     }).catch(function (e) {
-    //         err = e;
-    //     }).finally(function () {
-    //         expect(err).toBe(`user ${commentData.to} not found.`);
-    //     });
-    // });
-
-
-    /**
      * tests that valid profile can be created through profile services with success
      */
     it('comment send success', async () => {
@@ -87,6 +74,21 @@ describe('comment test suite - positive case', () => {
             expect(err).toBeNull();
             expect(result.comment).toBe('This is a test comment!');
         });
+    })
+
+    it('can get comment from', async () => {
+        let err = null;
+        let res = {};
+
+        //console.log(`from: ${result.from}`);
+        try {
+           res = await commentService.getCommentFrom(result.from);
+        }catch (e) {
+            err = e;
+        }
+
+        expect(err).toBeNull();
+        expect(res.length).toBe(1);
     })
 
     it('can like comment', async () => {
@@ -151,27 +153,105 @@ describe('comment test suite - positive case', () => {
             expect(result.total_count).toBe(1);
         });
     })
-
-
-    //
-    // it('unlike comment from user - failed cannot find comment', async () => {
-    //     let err = null;
-    //     let comment = null;
-    //
-    //     await commentService.likesComment(commentSend.to, 'UnLike').then(function (result) {
-    //         comment = result;
-    //         console.log(`result: ${result}`)
-    //     }).catch(function (err) {
-    //         console.log(`catch err: ${err}`);
-    //     }).finally(function () {
-    //         expect(err.toString()).toBe('Error: cannot find comment.');
-    //     });
-    // })
 });
 
 describe('comment test suite - negative case', () => {
     let result = null;
     let err = null;
+
+    it('comment send failed, user (to) not found', async () => {
+        let comment = {
+            from: '6571edbfd6e8bd609a6a5018',
+            to: '6571edbfd6e8bd609a6a501c',
+            mbti: null,
+            enneagram: "6w5",
+            zodiac: "Aquarius",
+            title: "test comment",
+            comment: "This is a test comment!",
+            likes: 0
+        };
+
+        const firstUser = {
+            name: "luke"
+        };
+
+        // create user
+        let firstUserId = await userService.insertUser(firstUser);
+        comment.from = firstUserId._id;
+
+        await commentService.insertComment(comment).then(data => {
+            result = data;
+        }).catch(function (e) {
+            err = e;
+        }).finally(function () {
+            expect(err).toBe('user 6571edbfd6e8bd609a6a501c is not found.')
+        });
+    });
+
+    it('comment send failed, user (from) not found', async () => {
+        let comment = {
+            from: '6571edbfd6e8bd609a6a5018',
+            to: '6571edbfd6e8bd609a6a501c',
+            mbti: null,
+            enneagram: "6w5",
+            zodiac: "Aquarius",
+            title: "test comment",
+            comment: "This is a test comment!",
+            likes: 0
+        };
+
+        const firstUser = {
+            name: "luke"
+        };
+
+        // create user
+        let firstUserId = await userService.insertUser(firstUser);
+        comment.to = firstUserId._id;
+
+        await commentService.insertComment(comment).then(data => {
+            result = data;
+        }).catch(function (e) {
+            err = e;
+        }).finally(function () {
+            expect(err).toBe('user 6571edbfd6e8bd609a6a5018 is not found.')
+        });
+    });
+
+    it('comment send failed, mandatory field is empty', async () => {
+        let comment = {
+            from: '6571edbfd6e8bd609a6a5018',
+            to: '6571edbfd6e8bd609a6a501c',
+            mbti: null,
+            enneagram: "6w5",
+            zodiac: "Aquarius",
+            title: "test comment",
+            comment: null,
+            likes: 0
+        };
+
+        const firstUser = {
+            name: "luke"
+        };
+
+        const secondUser = {
+            name: "evan"
+        };
+
+        // create user
+        const firstId = await userService.insertUser(firstUser);
+        const secondId = await userService.insertUser(secondUser);
+
+        comment.to = firstId._id;
+        comment.from = secondId._id;
+
+        await commentService.insertComment(comment).then(data => {
+            result = data;
+        }).catch(function (e) {
+            err = e;
+        }).finally(function () {
+            expect(err.toString()).toBe('ValidationError: comment: Path `comment` is required.')
+        });
+    });
 
     it('cannot get comment by id because comment not found', async () => {
         let err = null;
@@ -247,18 +327,29 @@ describe('comment test suite - negative case', () => {
     })
 
 
-    //
-    // it('unlike comment from user - failed cannot find comment', async () => {
-    //     let err = null;
-    //     let comment = null;
-    //
-    //     await commentService.likesComment(commentSend.to, 'UnLike').then(function (result) {
-    //         comment = result;
-    //         console.log(`result: ${result}`)
-    //     }).catch(function (err) {
-    //         console.log(`catch err: ${err}`);
-    //     }).finally(function () {
-    //         expect(err.toString()).toBe('Error: cannot find comment.');
-    //     });
-    // })
+    it('unlike comment - failed cannot find comment', async () => {
+        let err = null;
+        let comment = null;
+
+        await commentService.likesComment('656e195847b9ce124eb5cfc6', 'unlike').then(function (result) {
+            comment = result;
+        }).catch(function (e) {
+            err = e;
+        }).finally(function () {
+            expect(err.toString()).toBe('comment not found');
+        });
+    })
+
+    it('unlike comment from user - failed cannot find comment', async () => {
+        let err = null;
+        let comment = null;
+
+        await commentService.likesComment(result.to, 'unlike').then(function (result) {
+            comment = result;
+        }).catch(function (e) {
+            err = e;
+        }).finally(function () {
+            expect(err.toString()).toBe('comment not found');
+        });
+    })
 });

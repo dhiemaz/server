@@ -34,7 +34,7 @@ const findUser = (async (req, res) => {
         if (result) {
             responseMessage(res, 200, 'success', result);
         } else {
-            responseMessage(res, 404, 'success', result);
+            responseMessage(res, 404, 'not found', result);
         }
     }).catch(function (err) {
         responseMessage(res, 500, `failed find user with id: ${req.params.id}, ${err}.`, null);

@@ -16,7 +16,7 @@ const responseData = function (response, statusCode, values) {
 
 const responseMessage = function (response, statusCode, message, values) {
     let success = false;
-    if (statusCode === 200 || statusCode === 201) {
+    if (statusCode == 200 || statusCode == 201) {
         success = true;
     }
 
@@ -31,7 +31,7 @@ const responseMessage = function (response, statusCode, message, values) {
 };
 
 const responseView = function (response, statusCode, data) {
-    if (statusCode === 200) {
+    if (statusCode == 200) {
         response.render('profile_template', {
             profile: data,
         });

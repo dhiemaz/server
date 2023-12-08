@@ -19,11 +19,7 @@ const likeUnlikeComment = (async (req, res) => {
     logger.info(`${req.params.act} for comment: ${req.params.id}`)
     if (req.params.act === 'like' || req.params.act === 'unlike') {
         await likesComment(req.params.id, req.params.act).then(function (result) {
-            if (result) {
-                responseMessage(res, 200, 'success', result);
-            } else {
-                responseMessage(res, 404, `failed send ${req.params.act} to comment: ${req.params.id}, comment not found`, result);
-            }
+            responseMessage(res, 200, 'success', result);
         }).catch(function (err) {
             responseMessage(res, 422, `failed send ${req.params.act} to comment: ${req.params.id}, ${err}`, null);
         });

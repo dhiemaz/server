@@ -86,7 +86,7 @@ describe('user test suite - negative case', () => {
         }).catch(function (e) {
             err = e;
         }).finally(function () {
-            expect(err.toString()).toBe(`user 656e0ca1f093350d038ff9c7 not found.`);
+            expect(user).toBe(null);
         });
     })
 });

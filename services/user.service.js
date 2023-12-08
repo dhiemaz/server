@@ -2,7 +2,6 @@ const pino = require('pino');
 const logger = pino({level: 'info'});
 const mongoose = require('mongoose')
 const {User} = require('../models/user.model')
-const e = require("express");
 
 /**
  * insertUser
@@ -25,11 +24,6 @@ const insertUser = (async (data) => {
 const getUser = (async (id) => {
     try {
         let user = await User.findOne({_id: mongoose.Types.ObjectId(id)});
-        if (!user) {
-            logger.error(`get user: ${id}, result: user not found.`);
-            return Promise.reject(`user ${id} not found.`);
-        }
-
         logger.info(`get user: ${id}, result: ${user}`);
         return user;
     }catch (err) {
@@ -40,15 +34,15 @@ const getUser = (async (id) => {
 
 const isUserExist = (async (id) => {
     try {
-        let user = await User.findOne({_id: mongoose.Types.ObjectId(id)});
-        if (!user) {
+        const result = await User.findOne({ _id: id }).exec();
+        if (result) {
+            logger.info(`get user: ${id}, result: user exist.`);
+            return true;
+        } else {
             logger.error(`get user: ${id}, result: user not found.`);
             return false;
         }
-
-        logger.info(`get user: ${id}, result: user exist.`);
-        return true;
-    }catch (err) {
+    } catch (err) {
         logger.error(`failed get user: ${id}, error: ${err}`);
         return false;
     }

@@ -8,6 +8,7 @@ const {
     getProfile
 } = require('../services/profile.service');
 const {responseMessage, responseData, responseView} = require("../utils/response");
+const util = require('util');
 
 /**
  * viewProfile by id
@@ -15,21 +16,21 @@ const {responseMessage, responseData, responseView} = require("../utils/response
  */
 const viewProfile = (async (req, res) => {
     logger.info(`view profile id: ${req.params.id}`);
-    await getProfile(req.params.id).then(function (profile) {
-        if (profile) {
-            if (req.is('application/json')) {
-                responseMessage(res, 200, 'success', profile);
+    await getProfile(req.params.id).then(profile => {
+        if (req.get('Content-Type') === 'application/json') {
+            if (profile == null) {
+                responseMessage(res, 404, 'not found', profile);
+            } else {
+                responseMessage(res, 200, 'success',profile);
+            }
+        } else {
+            if (profile == null) {
+                responseView(res, 404, profile);
             } else {
                 responseView(res, 200, profile);
             }
-        } else {
-            if (req.is('application/json')) {
-                responseMessage(res, 404, 'not found',profile);
-            } else {
-                responseView(res, 404, null);
-            }
         }
-    }).catch(function (err) {
+    }).catch(err => {
         if (req.is('application/json')) {
             responseMessage(res, 500, `failed find profile with id: ${req.params.id}, ${err}.`, null);
         } else {
@@ -44,11 +45,11 @@ const viewProfile = (async (req, res) => {
  */
 const getAllProfiles = (async (req, res) => {
     logger.info('get all profile records');
-    await getProfiles().then(function (profile) {
-        if (profile) {
-            responseMessage(res, 200, 'success', profile);
+    await getProfiles().then(profiles => {
+        if (profiles.length > 0) {
+            responseMessage(res, 200, 'success', profiles);
         } else {
-            responseMessage(res, 404, 'not found', profile);
+            responseMessage(res, 404, 'not found', profiles);
         }
     }).catch(function (err) {
         responseMessage(res, 500, `failed get all profiles, ${err}.`, null);
@@ -63,9 +64,9 @@ const createProfile = (async (req, res) => {
     let data = {...req.body}
     logger.info(`create a new profile, data: ${data}`);
 
-    await insertProfile(data).then(function (result) {
+    await insertProfile(data).then( result => {
         responseMessage(res, 201, 'success', result);
-    }).catch(function (err) {
+    }).catch(err => {
         responseMessage(res, 422, err.toString());
     });
 })
